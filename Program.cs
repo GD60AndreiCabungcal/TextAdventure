@@ -3,11 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-/*
-TODO:
- - Add Math (+, -, *, /)
-*/
-
 class Program
 {
     static void Main(string[] args)
@@ -40,18 +35,18 @@ class Program
         name = Console.ReadLine();
 
         //user picks up an item
-        Console.WriteLine($"Why hello there, {name}. Which item do you want to take?");
+        Console.WriteLine($"Well hello there, {name}. Which item do you want to take?");
         inventory.Add(items[MakeDecision(items, new string[] { "Ooh, I like Apples too.", "You're ready to attack, now!", "Now you can feel warm at night.", "You're ready to defend!" })]);
 
         //user goes to a location
         Console.WriteLine("Where would you like to go?");
-        curLocationIndex = MakeDecision(locations, "You went to the");
+        curLocationIndex = MakeDecision(locations, $"{name} went to the");
         curLocation = locations[curLocationIndex];
 
         //user has encountered an enemy
         enemy = enemies[rng.Next(enemies.Length)];
         Console.WriteLine($"As {name} walked to the {curLocation}, they came across a wild {enemy}!");
-        switch(MakeDecision(new string[] { "Use an item", "Run", "Ignore it", "Become Friends"}, new string[] { $"You used {inventory.First()} on {enemy}!" , $"You ran away from the {enemy}.", $"{name} ignored it.", $"{name} is now best friends with a {enemy}!" })) {
+        switch(MakeDecision(new string[] { "Use an item", "Run", "Ignore it", "Become Friends"}, new string[] { $"{name} used {inventory.First()} on {enemy}!" , $"{name} ran away from the {enemy}.", $"{name} ignored it.", $"{name} is now best friends with a {enemy}!" })) {
             case 0: {
                 Console.WriteLine("What item do you want to use?");
                 string item = items[MakeDecision(items, $"{name} used the")];
@@ -63,31 +58,30 @@ class Program
                 break;
                 }
             default: break;
-
         }
 
         //user ends up at curLocation
-        Console.Write($"You arrived at the {curLocation}. ");
+        Console.Write($"{name} arrived at the {curLocation}. ");
         switch(curLocationIndex) {
             //if the user went to the village
             case 0: {
                 //itemName, price
-                (string, int)[] shop = new (string, int)[] {("bucket", 5), ("Scarf", 1), ("Zoar Meat", 7) };
+                (string, int)[] shop = new (string, int)[] { ("bucket", 5), ("Scarf", 1), ("Zoar Meat", 7) };
                 string[] options = new string[shop.Length + 1];
-                for(int i = 0; i < options.Length; i++) {
+                for(int i = 0; i < shop.Length; i++) {
                     options[i] = $"{shop[i].Item1} for {shop[i].Item2}";
                 }
                 options[options.Length - 1] = "Nothing";
 
                 //user attempts to buy item from shop
-                Console.WriteLine($"A villager offers {name} to shop at his shop. What will you buy?");
+                Console.WriteLine($"A villager offers {name} to shop at his shop. The villager offered the following items:");
                 int itemIndex = MakeDecision(options, $"{name} bought");
-                (string, int) item = shop[itemIndex];
                 if(itemIndex != options.Length - 1) {
+                    (string, int) item = shop[itemIndex];
                     inventory.Add(item.Item1);
                     money -= item.Item2;
                 }
-                Console.WriteLine($"You have ${money} left.");
+                Console.WriteLine($"{name} have ${money} left.");
                 break;
             }
             //if user went to the forest
