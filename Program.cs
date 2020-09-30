@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using TextAdventure.Core;
+
 class Program
 {
     static void Main(string[] args)
@@ -36,20 +38,20 @@ class Program
 
         //user picks up an item
         Console.WriteLine($"Well hello there, {name}. Which item do you want to take?");
-        inventory.Add(items[MakeDecision(items, new string[] { "Ooh, I like Apples too.", "You're ready to attack, now!", "Now you can feel warm at night.", "You're ready to defend!" })]);
+        inventory.Add(items[DecisionHandler.MakeDecision(items, new string[] { "Ooh, I like Apples too.", "You're ready to attack, now!", "Now you can feel warm at night.", "You're ready to defend!" })]);
 
         //user goes to a location
         Console.WriteLine("Where would you like to go?");
-        curLocationIndex = MakeDecision(locations, $"{name} went to the");
+        curLocationIndex = DecisionHandler.MakeDecision(locations, $"{name} went to the");
         curLocation = locations[curLocationIndex];
 
         //user has encountered an enemy
         enemy = enemies[rng.Next(enemies.Length)];
         Console.WriteLine($"As {name} walked to the {curLocation}, they came across a wild {enemy}!");
-        switch(MakeDecision(new string[] { "Use an item", "Run", "Ignore it", "Become Friends"}, new string[] { $"{name} used {inventory.First()} on {enemy}!" , $"{name} ran away from the {enemy}.", $"{name} ignored it.", $"{name} is now best friends with a {enemy}!" })) {
+        switch(DecisionHandler.MakeDecision(new string[] { "Use an item", "Run", "Ignore it", "Become Friends"}, new string[] { $"{name} used {inventory.First()} on {enemy}!" , $"{name} ran away from the {enemy}.", $"{name} ignored it.", $"{name} is now best friends with a {enemy}!" })) {
             case 0: {
                 Console.WriteLine("What item do you want to use?");
-                string item = items[MakeDecision(items, $"{name} used the")];
+                string item = items[DecisionHandler.MakeDecision(items, $"{name} used the")];
                 break;
                 }
             case 3: {
@@ -75,7 +77,7 @@ class Program
 
                 //user attempts to buy item from shop
                 Console.WriteLine($"A villager offers {name} to shop at his shop. The villager offered the following items:");
-                int itemIndex = MakeDecision(options, $"{name} bought");
+                int itemIndex = DecisionHandler.MakeDecision(options, $"{name} bought");
                 if(itemIndex != options.Length - 1) {
                     (string, int) item = shop[itemIndex];
                     inventory.Add(item.Item1);
@@ -92,7 +94,7 @@ class Program
             //if the user went to the park
             case 2: {
                 Console.WriteLine($"In the distance, {name} comes across a Dog.");
-                MakeDecision(new string[] { "Pet the Dog.", "Ignore It." }, new string[] { $"while {name} pet the dog, it pooped on your foot.", $"{name} ignored the dog. It was quite smelly."});
+                DecisionHandler.MakeDecision(new string[] { "Pet the Dog.", "Ignore It." }, new string[] { $"while {name} pet the dog, it pooped on your foot.", $"{name} ignored the dog. It was quite smelly."});
                 break;
             }
             //if the user went to the hill
@@ -101,7 +103,7 @@ class Program
                     //interact with friend
                     string friend = friends[rng.Next(friends.Count)];
                     Console.WriteLine($"{friend} spots you in the distance. {name} responds: ");
-                    MakeDecision(new string[] { "\"Hello, how are you doing?\"", "\"Hi!\"", "\"I'm busy right now.\"" }, new string[] { "I'm good! good luck on your adventure!", "Hello! Good luck on your adventure!", "Oh."});
+                    DecisionHandler.MakeDecision(new string[] { "\"Hello, how are you doing?\"", "\"Hi!\"", "\"I'm busy right now.\"" }, new string[] { "I'm good! good luck on your adventure!", "Hello! Good luck on your adventure!", "Oh."});
                 } 
                 else {
                     Console.WriteLine("The Hill is the tallest thing around here.");
@@ -109,44 +111,5 @@ class Program
                 break;
             }
         }
-    }
-
-    static int MakeDecision(string[] decisions, string[] answers) 
-    {
-        //user's answer
-        int selection = 0;
-
-        //display answers
-        for(int i = 0; i < decisions.Length; i++) {
-            Console.WriteLine($"{((char)(i+65)).ToString()}) {decisions[i]}");
-        }
-
-        //get valid user input
-        while(true) {
-            //player input
-            string input = Console.ReadLine();
-            char inputLetter = Char.ToUpper(input[0]);
-
-            //convert input into possible index
-            int index = inputLetter - '0' - 17;
-            //if value is a valid index for the decisions array
-            if(index < 0 || index >= decisions.Length) continue;
-
-            //set selection to index and exit input validation
-            selection = index;
-            break;
-        }
-
-        //display the reaction and return the index of the reaction
-        Console.WriteLine(answers[selection]);
-        return selection;
-    }
-
-    static int MakeDecision(string[] decisions, string answer = "You chose") {
-        string[] answers = new string[decisions.Length];
-        for(int i = 0; i < answers.Length; i++) {
-            answers[i] = $"{answer} {decisions[i]}.";
-        }
-        return MakeDecision(decisions, answers);
     }
 }
