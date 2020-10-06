@@ -11,7 +11,7 @@ namespace TextAdventure.Core
         public int Fullness { get; private set; } //10 is full, 0 is hungry
         public float Money { get; private set; }
 
-        public Player(string name, int x = 0, int y = 0) : base(name, x, y) 
+        public Player(string name = "Unknown", int x = 0, int y = 0) : base(name, x, y) 
         {
             Fullness = 10;
             Money = 50;

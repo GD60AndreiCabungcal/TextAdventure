@@ -8,14 +8,14 @@ namespace TextAdventure.Core
 {
     public abstract class Entity
     {
-        public string Name { get; protected set; }
+        public string Name { get; set; }
         public int[] Position { get; set; }
         public int Health { get; protected set; }
-        public int Armor { get; protected set; } //3 is full, 0 is empty; used for defending attacks
+        public int Armor { get; set; } //3 is full, 0 is empty; used for defending attacks
         public List<Item> Inventory { get; protected set; }
         public List<Entity> Allies { get; protected set; }
 
-        public Entity(string name, int x = 0, int y = 0) 
+        public Entity(string name, int x, int y)
         {
             Name = name;
             Position = new int[] { x, y };

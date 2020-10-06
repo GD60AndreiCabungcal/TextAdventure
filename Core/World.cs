@@ -25,9 +25,24 @@ namespace TextAdventure.Core
             return (Location)Locations.GetValue(x,y);
         }
 
-        public void MoveEntity(Entity entity, int x, int y)
+        public Location GetLocation(Entity entity)
+        {
+            return (Location)Locations.GetValue(entity.Position[0], entity.Position[1]);
+        }
+
+        public Location GetLocation(Item item)
+        {
+            return (Location)Locations.GetValue(item.Position[0], item.Position[1]);
+        }
+
+        public void WorldMoveEntity(Entity entity, int x, int y)
         {
             entity.Position = new int[] { x, y };
+        }
+
+        public void LocalMoveEntity(Entity entity, int xDir, int yDir)
+        {
+            entity.Position = new int[] { entity.Position[0] + xDir, entity.Position[1] + yDir };
         }
 
         public void EntityGetItem(Entity entity, Item item)

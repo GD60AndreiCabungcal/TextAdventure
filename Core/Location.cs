@@ -11,11 +11,11 @@ namespace TextAdventure.Core
         public string Description { get; private set; }        
         public List<Item> Items { get; set; }
 
-        public Location(string name, string description, List<Item> items)
+        public Location(string name, string description, params Item[] items)
         {
             Name = name;
             Description = description;
-            Items = items;
+            Items = items.ToList();
         }
     }
 }
