@@ -16,7 +16,12 @@ namespace TextAdventure.Core
         {
             Name = name;
             Position = new int[] { x, y };
-            Name = description;
+            Description = description;
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

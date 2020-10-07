@@ -11,16 +11,28 @@ class Program
     {
         //object used for generating random numbers
         Random rng = new Random();
+
         /*
          01234
         0   *
         1*****
         2  * *
-        3*****
+        3***S*
         4*
         */
 
-        Location[,] world = new Location[/*col*/,/*row*/]
+        //user information
+        Player player = new Player("", 0, 4);
+        Merchant merchant1 = new Merchant("Merchant", 3, 3);
+
+        //Entity Information
+        List<Entity> entities = new Entity[] 
+        {
+            player,
+            merchant1
+        }.ToList();
+
+        Location[,] map = new Location[/*col*/,/*row*/]
         {
             {
                 null,
@@ -47,7 +59,10 @@ class Program
                 new Location("Grass", "3,0"),
                 new Location("Grass", "3,1"),
                 null,
-                new Location("Grass", "3,3"),
+                new Shop("Merchant", merchant1, new ShopItem[] {
+                    new ShopItem(new Food("Apple", 2), 2),
+                    new ShopItem(new Weapon("Stone Sword", 1, 0.3f), 5)
+                }),
                 null
             },
             {
@@ -59,22 +74,17 @@ class Program
             },
         };
 
-        //user information
-        Player player = new Player("", 0, 4);
-
-        //Entity Information
-        List<Entity> entities = new Entity[] 
-        {
-            player
-        }.ToList();
-
         //World information
-        World overworld = new World("Overworld", world, entities, null);
+        World world = new World("Overworld", map, entities, null);
 
         /* --- START OF GAME --- */
         Console.WriteLine("Hello traveler! What is your name?");
         player.Name = Console.ReadLine();
         Console.WriteLine($"Nice to meet you, {player.Name}. Welcome to the village! Make yourself feel at home here.");
-        while(true) DecisionHandler.MovePlayer(overworld, player);
+        while(true) 
+        {
+            world.GetLocation(player).LocationEvent(player);
+            DecisionHandler.GetInput(world, player);
+        }
     }
 }

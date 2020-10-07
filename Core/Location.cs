@@ -17,5 +17,10 @@ namespace TextAdventure.Core
             Description = description;
             Items = items.ToList();
         }
+
+        public virtual void LocationEvent(Player player)
+        {
+            Console.WriteLine($"{Name}:\n{Description}");
+        }
     }
 }

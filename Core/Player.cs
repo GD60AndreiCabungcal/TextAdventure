@@ -22,5 +22,7 @@ namespace TextAdventure.Core
             Inventory.Add(item);
             Money -= price;
         }
+
+        public void PurchaceItem(ShopItem shopItem) => PurchaceItem(shopItem.item, shopItem.price);
     }
 }

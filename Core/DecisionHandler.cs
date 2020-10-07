@@ -51,7 +51,7 @@ namespace TextAdventure.Core
             return MakeDecision(decisions, answers);
         }
 
-        public static void MovePlayer(World world, Player player)
+        public static void GetInput(World world, Player player)
         {
             //prompt user where to go
             Console.WriteLine($"Where would you like to move{(string.IsNullOrEmpty(player.Name) ? "?" : $", {player.Name}?")}");

@@ -26,7 +26,9 @@ namespace TextAdventure.Core
 
         public virtual bool TakeDamage(int damage, float critChance = 1) //returns true if entity took damage
         {
+            //rng is an instance of the Random class
             Random rng = new Random();
+            //check if other entity critical hits player
             bool didCrit = critChance > rng.NextDouble();
 
             if(Armor > 0 && !didCrit) {
