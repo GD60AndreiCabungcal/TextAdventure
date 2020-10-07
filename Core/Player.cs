@@ -17,6 +17,12 @@ namespace TextAdventure.Core
             Money = 50;
         }
 
+        public override void Die()
+        {
+            Console.WriteLine("A hero has fallen.");
+            System.Environment.Exit(0);
+        }
+
         public void PurchaceItem(Item item, float price)
         {
             Inventory.Add(item);

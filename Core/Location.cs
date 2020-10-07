@@ -20,7 +20,7 @@ namespace TextAdventure.Core
 
         public virtual void LocationEvent(Player player)
         {
-            Console.WriteLine($"{Name}:\n{Description}");
+            Console.WriteLine($"\n{Name}:\n{Description}\n");
         }
     }
 }

@@ -17,19 +17,18 @@ class Program
         0   *
         1*****
         2  * *
-        3***S*
+        3E**S*
         4*
         */
 
         //user information
         Player player = new Player("", 0, 4);
-        Merchant merchant1 = new Merchant("Merchant", 3, 3);
 
         //Entity Information
         List<Entity> entities = new Entity[] 
         {
             player,
-            merchant1
+            new Enemy("Bababouy", 0, 3)
         }.ToList();
 
         Location[,] map = new Location[/*col*/,/*row*/]
@@ -59,9 +58,9 @@ class Program
                 new Location("Grass", "3,0"),
                 new Location("Grass", "3,1"),
                 null,
-                new Shop("Merchant", merchant1, new ShopItem[] {
+                new Shop("Merchant", new Merchant("Merchant", 3, 3), new ShopItem[] {
                     new ShopItem(new Food("Apple", 2), 2),
-                    new ShopItem(new Weapon("Stone Sword", 1, 0.3f), 5)
+                    new ShopItem(new Weapon("Stone Sword", 2, 0.3f), 5)
                 }),
                 null
             },
@@ -84,6 +83,7 @@ class Program
         while(true) 
         {
             world.GetLocation(player).LocationEvent(player);
+            world.EntityInteract();
             DecisionHandler.GetInput(world, player);
         }
     }

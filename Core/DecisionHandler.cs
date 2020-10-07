@@ -23,11 +23,6 @@ namespace TextAdventure.Core
                 string input = Console.ReadLine();
                 char inputLetter = Char.ToUpper(input[0]);
 
-                //user can exit application when they type 'exit'
-                if(input.ToUpper() == "EXIT") {
-                    System.Environment.Exit(0);
-                }
-
                 //convert input into possible index
                 int index = inputLetter - '0' - 17;
                 //if value is a valid index for the decisions array
@@ -51,20 +46,25 @@ namespace TextAdventure.Core
             return MakeDecision(decisions, answers);
         }
 
+        public static int MakeDecision(List<string> decisions, List<string> answers) { return MakeDecision(decisions.ToArray(), answers.ToArray()); }
+        public static int MakeDecision(List<string> decisions, string answer) { return MakeDecision(decisions.ToArray(), answer); }
+
         public static void GetInput(World world, Player player)
         {
-            //prompt user where to go
-            Console.WriteLine($"Where would you like to move{(string.IsNullOrEmpty(player.Name) ? "?" : $", {player.Name}?")}");
-            
-            //setup dirrection prompt
+            //prompt user what to do
+            Console.WriteLine($"What would you like to do{(string.IsNullOrEmpty(player.Name) ? "?" : $", {player.Name}?")}");
+            Console.WriteLine("stats");
+            Console.WriteLine("inventory");
+            Console.WriteLine("eat");
+
+            //setup dirrection command
             (int, int, string)[] directions = new (int, int, string)[] { (0,1, "south"), (0,-1, "north"), (1,0, "east"), (-1,0, "west") };
             List<(int, int, string)> allowedMoves = new List<(int, int, string)>();
-            (int, int, string) move = (0, 0, "");
             string directionOutput = "move <";
 
             foreach(var direction in directions) {
-                int dirX = player.Position[0] + direction.Item1;
-                int dirY = player.Position[1] + direction.Item2;
+                int dirX = player.Pos.x + direction.Item1;
+                int dirY = player.Pos.y + direction.Item2;
 
                 //if the direction is out of bounds, then skip it
                 if((dirX < 0 || dirX >= world.Locations.GetLength(0)) || ((dirY < 0 || dirY >= world.Locations.GetLength(1)))) continue;
@@ -81,23 +81,79 @@ namespace TextAdventure.Core
 
             //get player input
             string[] input;
-            while(true)
+            bool inputActive = true;
+            while(inputActive)
             {
-                input = Console.ReadLine().ToLower().Split(' ');
-                if(input.Length != 2) {
-                    Console.WriteLine("Invalid input length.");
-                } else if (input[0] != "move") {
-                    Console.WriteLine("Invalid 1st argument.");
-                } else if (!allowedMoves.Exists(dir => dir.Item3 == input[1])) {
-                    Console.WriteLine("Invalid 2nd argument.");
-                } else {
-                    move = allowedMoves.Find(dir => dir.Item3 == input[1]);
-                    break;
-                }         
-            }
+                input = Console.ReadLine().Split(' ');
+                switch(input[0].ToLower())
+                {
+                    //when player wants to check their stats
+                    case "stats":
+                    {   
+                        string name = player.Name;
+                        int health = player.Health;
+                        int armor = player.Armor;
+                        int fullness = player.Fullness;
+                        float money = player.Money;
+                        
+                        string allies = "";
+                        foreach(Entity ally in player.Allies)
+                        {
+                            allies += $"\n    {ally}";
+                        }
 
-            //apply player input
-            world.LocalMoveEntity(player, move.Item1, move.Item2);
+                        //display stats
+                        Console.WriteLine($"\n{name}'s Stats:\nHealth: {health}\nArmor: {armor}\nFullness: {fullness}\nMoney: {money}\nAllies: {allies}");
+                        inputActive = false;
+                        break;
+                    }
+                    //when player wants to check their inventory
+                    case "inventory":
+                    {   
+                        string inventory = "";
+                        foreach(Item item in player.Inventory)
+                        {
+                            inventory += $"\n    {item.Stats()}";
+                        }
+                        Console.WriteLine($"\nInventory: {inventory}");
+                        inputActive = false;
+                        break;
+                    }
+                    case "eat":
+                    {   
+                        if(input.Length != 2)
+                        {
+                            Console.WriteLine("Invalid Argument Length.");
+                            break;
+                        }
+                        Food food = (Food)player.Inventory.Find(x => x.GetType() == typeof(Food) && x.Name.ToLower() == input[1].ToLower());
+                        player.Heal(food);
+                        break;
+                    }
+                    //when player wants to move around
+                    case "move":
+                    {
+                        if(input.Length != 2)
+                        {
+                            Console.WriteLine("Invalid Argument Length.");
+                            break;
+                        }
+                        (int, int, string) move = allowedMoves.Find(x => x.Item3 == input[1].ToLower());
+                        if(move == (0, 0, null)) {
+                            Console.WriteLine("Invalid 2nd argument.");
+                        } else {
+                            world.LocalMoveEntity(player, move.Item1, move.Item2);
+                            inputActive = false;
+                        }
+                        break;
+                    }
+                    default: 
+                    {
+                        Console.WriteLine("Invalid Arguments.");
+                        break;
+                    }
+                }
+            }
         }
     }
 }

@@ -9,18 +9,20 @@ namespace TextAdventure.Core
     public abstract class Entity
     {
         public string Name { get; set; }
-        public int[] Position { get; set; }
-        public int Health { get; protected set; }
-        public int Armor { get; set; } //3 is full, 0 is empty; used for defending attacks
+        public Position Pos { get; set; }
+        protected int health;
+        public int Health { get { return health; } protected set { Math.Max(0, value); } }
+        protected int armor;
+        public int Armor { get { return armor; } set { Math.Clamp(value, 0, 3); } } //3 is full, 0 is empty; used for defending attacks
         public List<Item> Inventory { get; protected set; }
         public List<Entity> Allies { get; protected set; }
 
-        public Entity(string name, int x, int y)
+        public Entity(string name, int x, int y, params Item[] inventory)
         {
             Name = name;
-            Position = new int[] { x, y };
-            Health = 10;
-            Inventory = new List<Item>();
+            Pos = new Position(x, y);
+            health = 10;
+            Inventory = inventory.ToList();
             Allies = new List<Entity>();
         }
 
@@ -36,8 +38,9 @@ namespace TextAdventure.Core
                 Console.WriteLine($"{Name} defended the attack!");
                 return false;
             } else {
-                Health -= damage;
+                health -= damage;
                 Console.WriteLine($"{Name} took {damage} damage!");
+                if(health <= 0) Die();
                 return true;
             }
         }
@@ -47,10 +50,32 @@ namespace TextAdventure.Core
             return TakeDamage(weapon.Damage, weapon.CritChance);
         }
 
+        public virtual void Die()
+        {
+            Console.WriteLine($"{Name} has died!");
+        }
+
         public virtual void Heal(int heal) 
         {
             Health += heal;
             Console.WriteLine($"{Name} healed by {heal} points!");
+        }
+
+        public virtual void Heal(Food food)
+        {
+            if(!Inventory.Exists(x => x == food)) return;
+            Heal(food.HealPoints);
+            Inventory.Remove(food);
+        }
+
+        public virtual void Interact(World world, Entity entity)
+        {
+
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}({health}HP)";
         }
     }
 }

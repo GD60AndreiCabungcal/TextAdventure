@@ -16,5 +16,10 @@ namespace TextAdventure.Core
             Damage = damage;
             CritChance = critChance;
         }
+
+        public override string Stats()
+        {
+            return $"{Name}({Damage}Atk {CritChance}Crt)";
+        }
     }
 }
