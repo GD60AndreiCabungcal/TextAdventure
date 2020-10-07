@@ -13,7 +13,26 @@ namespace TextAdventure.Core
         protected int health;
         public int Health { get { return health; } protected set { Math.Max(0, value); } }
         protected int armor;
-        public int Armor { get { return armor; } set { Math.Clamp(value, 0, 3); } } //3 is full, 0 is empty; used for defending attacks
+        public int Armor
+        {
+            get
+            {
+                int armorPoints = 0;
+                foreach(Item item in Inventory)
+                {
+                    if(item.GetType() != typeof(Armor)) continue;
+                    Armor armor = (Armor)item;
+                    armorPoints += armor.ArmorPoints;
+                }
+                return armorPoints;
+            }
+
+            set
+            {
+                MathF.Max(0, value);
+            }
+        }
+            //used for defending attacks
         public List<Item> Inventory { get; protected set; }
         public List<Entity> Allies { get; protected set; }
 

@@ -39,6 +39,11 @@ namespace TextAdventure.Core
                 }
             }
         }
+
+        public override string MapIcon()
+        {
+            return "S";
+        }
     }
     
     public struct ShopItem

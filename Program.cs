@@ -15,7 +15,7 @@ class Program
         /*
          01234
         0   *
-        1*****
+        1S****
         2  * *
         3E**S*
         4*
@@ -35,7 +35,10 @@ class Program
         {
             {
                 null,
-                new Location("Cliff", "It's very high up here."),
+                new Shop("Cliffside Shop", new Merchant("Billy"), new ShopItem[] {
+                    new ShopItem(new Armor("Gold Pants", 2, description: "Very shiny."), 5),
+                    new ShopItem(new Food("Shiny Apple", 10), 7)
+                }, "It's very high up here."),
                 null,
                 new Location("Grass", "wow"),
                 new Location("Starting area", "wow")
@@ -58,7 +61,7 @@ class Program
                 new Location("Grass", "3,0"),
                 new Location("Grass", "3,1"),
                 null,
-                new Shop("Merchant", new Merchant("Merchant", 3, 3), new ShopItem[] {
+                new Shop("Merchant Shop", new Merchant("Merchant"), new ShopItem[] {
                     new ShopItem(new Food("Apple", 2), 2),
                     new ShopItem(new Weapon("Stone Sword", 2, 0.3f), 5)
                 }),

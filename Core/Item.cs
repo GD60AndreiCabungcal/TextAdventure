@@ -11,10 +11,12 @@ namespace TextAdventure.Core
         public string Name { get; protected set; }
         public Position Pos { get; set; }
         public string Description { get; protected set; }
+        public bool ForceSingle { get; private set; }
 
-        public Item(string name, int x = 0, int y = 0, string description = "")
+        public Item(string name, bool forceSingle = false, int x = 0, int y = 0, string description = "")
         {
             Name = name;
+            ForceSingle = forceSingle;
             Pos = new Position(x, y);
             Description = description;
         }

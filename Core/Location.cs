@@ -22,5 +22,10 @@ namespace TextAdventure.Core
         {
             Console.WriteLine($"\n{Name}:\n{Description}\n");
         }
+
+        public virtual string MapIcon()
+        {
+            return "*";
+        }
     }
 }

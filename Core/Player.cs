@@ -14,7 +14,7 @@ namespace TextAdventure.Core
         public Player(string name = "Unknown", int x = 0, int y = 0) : base(name, x, y) 
         {
             Fullness = 10;
-            Money = 50;
+            Money = 15;
         }
 
         public override void Die()
@@ -25,6 +25,10 @@ namespace TextAdventure.Core
 
         public void PurchaceItem(Item item, float price)
         {
+            if(item.ForceSingle && Inventory.Exists(x => x.Name == item.Name)) {
+                Console.WriteLine($"You can't have more than 1 of {item.Name}!");
+                return;
+            }
             Inventory.Add(item);
             Money -= price;
         }

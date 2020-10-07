@@ -7,6 +7,6 @@ namespace TextAdventure.Core
 {
     public class Merchant : Entity
     {
-        public Merchant(string name, int x, int y) : base(name, x, y) { }
+        public Merchant(string name, int x = 0, int y = 0) : base(name, x, y) { }
     }
 }

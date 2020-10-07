@@ -180,5 +180,21 @@ namespace TextAdventure.Core
                 }
             }
         }
+
+        //displays the current map
+        public void DisplayMap()
+        {
+            Console.WriteLine($"- - -({Name})- - -");
+            for(int row = 0; row < Locations.GetLength(0); row++)
+            {
+                for(int col = 0; col < Locations.GetLength(1); col++)
+                {
+                    Location location = Locations[col, row];
+                    Console.Write(location != null ? location.MapIcon() : " ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine($"- - -({Name})- - -");
+        }
     }
 }
