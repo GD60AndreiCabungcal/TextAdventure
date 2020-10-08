@@ -16,9 +16,9 @@ namespace TextAdventure.Core
             ShopItems = shopItems;
         }
 
-        public override void LocationEvent(Player player)
+        public override void LocationEvent(World world, Player player)
         {
-            base.LocationEvent(player);
+            base.LocationEvent(world, player);
 
             string[] decisions = new string[ShopItems.Length + 1];
             for(int i = 0; i < ShopItems.Length; i++) {
@@ -33,7 +33,7 @@ namespace TextAdventure.Core
                 if(answer == ShopItems.Length) {
                     break;
                 } else if(ShopItems[answer].price > player.Money) {
-                    Console.WriteLine("You can't buy that!");
+                    Console.WriteLine("You don't have enough money!");
                 } else {
                     player.PurchaceItem(ShopItems[answer]);
                 }

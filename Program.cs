@@ -9,84 +9,42 @@ class Program
 {
     static void Main(string[] args)
     {
-        //object used for generating random numbers
-        Random rng = new Random();
-
-        /*
-         01234
-        0   *
-        1S****
-        2  * *
-        3E**S*
-        4*
-        */
-
-        //user information
+        //default player
         Player player = new Player("", 0, 4);
 
-        //Entity Information
+        //entity Information
         List<Entity> entities = new Entity[] 
         {
             player,
-            new Enemy("Bababouy", 0, 3)
+            new Enemy("Bababouy", 0, 3),
+            new Enemy("Gogy", 3, 1, new Armor("Shiny Chestplate", 4, "Chestplate"))
         }.ToList();
 
-        Location[,] map = new Location[/*col*/,/*row*/]
+        //item information
+        List<Item> items = new Item[]
         {
-            {
-                null,
-                new Shop("Cliffside Shop", new Merchant("Billy"), new ShopItem[] {
-                    new ShopItem(new Armor("Gold Pants", 2, description: "Very shiny."), 5),
-                    new ShopItem(new Food("Shiny Apple", 10), 7)
-                }, "It's very high up here."),
-                null,
-                new Location("Grass", "wow"),
-                new Location("Starting area", "wow")
-            },
-            {
-                null,
-                new Location("Grass", "1,1"),
-                null,
-                new Location("Grass", "1,3"),
-                null
-            },
-            {
-                null,
-                new Location("Grass", "2,1"),
-                new Location("Grass", "2,2"),
-                new Location("Grass", "2,3"),
-                null
-            },
-            {
-                new Location("Grass", "3,0"),
-                new Location("Grass", "3,1"),
-                null,
-                new Shop("Merchant Shop", new Merchant("Merchant"), new ShopItem[] {
-                    new ShopItem(new Food("Apple", 2), 2),
-                    new ShopItem(new Weapon("Stone Sword", 2, 0.3f), 5)
-                }),
-                null
-            },
-            {
-                null,
-                new Location("Grass", "4,1"),
-                new Location("Grass", "4,2"),
-                new Location("Grass", "4,3"),
-                null
-            },
-        };
+            new Armor("Wooly Boots", 2, "Boots", x: 4, y: 2),
+            new Armor("Wooly Cloak", 3, "Chestplate", x: 1, y: 3)
+        }.ToList();
+
+        //map information
+        Location[,] map = GameDictionary.MAP;
 
         //World information
-        World world = new World("Overworld", map, entities, null);
+        World world = new World("Overworld", map, entities, items);
 
         /* --- START OF GAME --- */
         Console.WriteLine("Hello traveler! What is your name?");
         player.Name = Console.ReadLine();
-        Console.WriteLine($"Nice to meet you, {player.Name}. Welcome to the village! Make yourself feel at home here.");
+        Console.WriteLine($"Nice to meet you, {player.Name}. There's a few shops to the east if you want to check them out.");
+        //game loop
         while(true) 
         {
-            world.GetLocation(player).LocationEvent(player);
+            //play the location event
+            world.GetLocation(player).LocationEvent(world, player);
+            //interact with entities
             world.EntityInteract();
+            //promp the player where to go next
             DecisionHandler.GetInput(world, player);
         }
     }

@@ -71,22 +71,22 @@ namespace TextAdventure.Core
             }
 
             //display each action available to the player
-            foreach(PlayerAction<bool> action in CommandList.defaultCommands)
+            foreach(PlayerAction<bool> action in GameDictionary.defaultCommands)
             {
                 Console.WriteLine(action.Display(world, player, allowedMoves));
             }
 
-            //get player input and perform action
+            //action loop
             string[] input;
             while(true)
             {
                 input = Console.ReadLine().Split(' ');
 
-                PlayerAction<bool> action = CommandList.defaultCommands.Find((x) => x.Name == input[0].ToLower());
+                PlayerAction<bool> action = GameDictionary.defaultCommands.Find((x) => x.Name == input[0].ToLower());
                 if(action != null) 
                 {
                     bool result = action.Do(world, player, input, allowedMoves);
-                    if(result) break; //if the result is true, then the command was executed sucessfully
+                    if(result) break; //if the result is true, the action loop will terminate
                 }
             }
         }

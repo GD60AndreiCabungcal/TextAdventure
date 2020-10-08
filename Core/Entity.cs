@@ -26,15 +26,9 @@ namespace TextAdventure.Core
                 }
                 return armorPoints;
             }
-
-            set
-            {
-                MathF.Max(0, value);
-            }
         }
             //used for defending attacks
         public List<Item> Inventory { get; protected set; }
-        public List<Entity> Allies { get; protected set; }
 
         public Entity(string name, int x, int y, params Item[] inventory)
         {
@@ -42,7 +36,6 @@ namespace TextAdventure.Core
             Pos = new Position(x, y);
             health = 10;
             Inventory = inventory.ToList();
-            Allies = new List<Entity>();
         }
 
         public virtual bool TakeDamage(int damage, float critChance = 1) //returns true if entity took damage
@@ -53,7 +46,12 @@ namespace TextAdventure.Core
             bool didCrit = critChance > rng.NextDouble();
 
             if(Armor > 0 && !didCrit) {
-                Armor--;
+                foreach(Item item in Inventory)
+                {
+                    if(item.GetType() != typeof(Armor)) continue;
+                    Armor armor = (Armor)item;
+                    armor.ArmorPoints--;
+                }
                 Console.WriteLine($"{Name} defended the attack!");
                 return false;
             } else {

@@ -8,12 +8,10 @@ namespace TextAdventure.Core
 {
     public class Player : Entity
     {
-        public int Fullness { get; private set; } //10 is full, 0 is hungry
         public float Money { get; private set; }
 
         public Player(string name = "Unknown", int x = 0, int y = 0) : base(name, x, y) 
         {
-            Fullness = 10;
             Money = 15;
         }
 
@@ -25,7 +23,7 @@ namespace TextAdventure.Core
 
         public void PurchaceItem(Item item, float price)
         {
-            if(item.ForceSingle && Inventory.Exists(x => x.Name == item.Name)) {
+            if(item.ForceSingle && Inventory.Exists(i => i.Tag == item.Tag)) {
                 Console.WriteLine($"You can't have more than 1 of {item.Name}!");
                 return;
             }
@@ -34,5 +32,11 @@ namespace TextAdventure.Core
         }
 
         public void PurchaceItem(ShopItem shopItem) => PurchaceItem(shopItem.item, shopItem.price);
+
+        public void GainMoney(int amount)
+        {
+            Money += amount;
+            Console.WriteLine($"{Name} got paid ${amount}!");
+        }
     }
 }

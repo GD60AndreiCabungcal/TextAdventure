@@ -23,17 +23,17 @@ namespace TextAdventure.Core
         //returns a given location based on the coordinates
         public Location GetLocation(int x, int y)
         {
-            return (Location)Locations.GetValue(x,y);
+            return Locations[x, y];
         }
 
         public Location GetLocation(Entity entity)
         {
-            return (Location)Locations.GetValue(entity.Pos.x, entity.Pos.y);
+            return Locations[entity.Pos.x, entity.Pos.y];
         }
 
         public Location GetLocation(Item item)
         {
-            return (Location)Locations.GetValue(item.Pos.x, item.Pos.y);
+            return Locations[item.Pos.x, item.Pos.y];
         }
 
         //moves an entity to an absloute position
@@ -85,7 +85,7 @@ namespace TextAdventure.Core
                     //  -> prompt dialogue for player only
 
                     List<Weapon> weapons = entity.Inventory.OfType<Weapon>().ToList();
-                    weapons.Add(new Weapon("Fist", 1, 0));
+                    weapons.Add(new Weapon("Fists", 1, 0));
                     
                     offender = entity;
 
@@ -182,7 +182,7 @@ namespace TextAdventure.Core
         }
 
         //displays the current map
-        public void DisplayMap()
+        public void DisplayMap(Player player)
         {
             Console.WriteLine($"- - -({Name})- - -");
             for(int row = 0; row < Locations.GetLength(0); row++)
@@ -190,7 +190,7 @@ namespace TextAdventure.Core
                 for(int col = 0; col < Locations.GetLength(1); col++)
                 {
                     Location location = Locations[col, row];
-                    Console.Write(location != null ? location.MapIcon() : " ");
+                    Console.Write(location == GetLocation(player) ? "X" : location != null ? location.MapIcon() : " ");
                 }
                 Console.WriteLine();
             }

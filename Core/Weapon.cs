@@ -11,7 +11,7 @@ namespace TextAdventure.Core
         public int Damage { get; private set; }
         public float CritChance { get; private set; }
 
-        public Weapon(string name, int damage, float critChance, bool forceSingle = true, int x = 0, int y = 0, string description = "") : base(name, forceSingle, x, y, description)
+        public Weapon(string name, int damage, float critChance, string tag = "", bool forceSingle = true, int x = 0, int y = 0, string description = "") : base(name, tag, forceSingle, x, y, description)
         {
             Damage = damage;
             CritChance = critChance;
