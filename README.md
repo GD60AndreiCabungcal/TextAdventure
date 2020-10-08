@@ -7,7 +7,7 @@
 
 - Link to Clone: https://github.com/GD60AndreiCabungcal/TextAdventure.git (main branch)
 
-Programming Requirements:
+- Programming Requirements:
     - Generate Random numbers (Entity.cs, line 46)
     - Use a 'while' loop to validate user input (DecisionHandler.cs, lines 21-34)
     - Use the TryParse method to convert a string to an integer (GameDictionary.cs, line 181)
