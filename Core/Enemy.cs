@@ -7,7 +7,10 @@ namespace TextAdventure.Core
 {
     public class Enemy : Entity
     {
-        public Enemy(string name, int x, int y, params Item[] inventory) : base(name, x, y, inventory) { }
+        public Enemy(string name, float money, int x, int y, params Item[] inventory) : base(name, x, y, inventory) 
+        { 
+            Money = money;
+        }
 
         public override void Interact(World world, Entity entity)
         {
@@ -16,6 +19,12 @@ namespace TextAdventure.Core
 
             Console.WriteLine($"{Name}: Hey you, let's fight!");
             world.Fight(this, player);
+        }
+
+        public override void Die(Entity killedBy)
+        {
+            base.Die(killedBy);
+            killedBy.GainMoney(Money);
         }
     }
 }

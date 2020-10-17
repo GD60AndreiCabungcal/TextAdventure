@@ -14,6 +14,7 @@ namespace TextAdventure.Core
         {
             Owner = owner;
             ShopItems = shopItems;
+            Tag = "Shop";
         }
 
         public override void LocationEvent(World world, Player player)
@@ -21,11 +22,10 @@ namespace TextAdventure.Core
             base.LocationEvent(world, player);
 
             string[] decisions = new string[ShopItems.Length + 1];
-            for(int i = 0; i < ShopItems.Length; i++) {
-                decisions[i] = $"{ShopItems[i].item} for ${ShopItems[i].price}";
+            for(int i = 0; i < decisions.Length; i++) {
+                decisions[i] = i < ShopItems.Length ? $"{ShopItems[i].item} for ${ShopItems[i].price}" : "Nothing";
             }
-            decisions[ShopItems.Length] = "Nothing";
-
+            
             while(true)
             {
                 Console.WriteLine($"What do you wnat to buy?\nMoney: ${player.Money}");
@@ -40,9 +40,9 @@ namespace TextAdventure.Core
             }
         }
 
-        public override string MapIcon()
+        public override char MapIcon()
         {
-            return "S";
+            return 'S';
         }
     }
     

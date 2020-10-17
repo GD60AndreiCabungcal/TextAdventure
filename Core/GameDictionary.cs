@@ -7,64 +7,6 @@ namespace TextAdventure.Core
 {
     public class GameDictionary
     {
-        /*Game Map
-         01234 <- col/x value  Map layout
-        0   *
-        1S**E*
-        2  * I
-        3EI*S*
-        4X
-        ^- row/y value
-        */
-
-        public static readonly Location[,] MAP = new Location[/*col*/,/*row*/]
-        {
-            {
-                null,
-                new Shop("Cliffside Shop", new Merchant("Billy"), new ShopItem[] {
-                    new ShopItem(new Armor("Gold Pants", 2, "Pants", description: "Very shiny."), 5),
-                    new ShopItem(new Food("Shiny Apple", 10), 7),
-                    new ShopItem(new Weapon("Beat Stick", 6, 0.8f), 10)
-                }, "It's very high up here."),
-                null,
-                new Location("Grass", "Just plain grass."),
-                new Location("Starting area", "Just plain grass.")
-            },
-            {
-                null,
-                new Location("Grass", "Just plain grass."),
-                null,
-                new Location("Grass", "Just plain grass."),
-                null
-            },
-            {
-                null,
-                new Location("Grass", "Just plain grass."),
-                new Location("Grass", "Just plain grass."),
-                new Location("Grass", "Just plain grass."),
-                null
-            },
-            {
-                new Location("Grass", "Just plain grass."),
-                new Location("Grass", "Just plain grass."),
-                null,
-                new Shop("Merchant Shop", new Merchant("Merchant"), new ShopItem[] {
-                    new ShopItem(new Food("Apple", 2), 2),
-                    new ShopItem(new Food("Shiny Carrot", 3), 3),
-                    new ShopItem(new Weapon("Stone Sword", 2, 0.3f), 5),
-                    new ShopItem(new Armor("Tin Helmet", 2, "Helmet"), 4)
-                }),
-                null
-            },
-            {
-                null,
-                new Location("Grass", "Just plain grass."),
-                new Location("Grass", "Just plain grass."),
-                new Location("Grass", "Just plain grass."),
-                null
-            },
-        };
-
         //list of all the actions available to the player
         public static List<PlayerAction<bool>> defaultCommands = new PlayerAction<bool>[]
         {
@@ -96,7 +38,7 @@ namespace TextAdventure.Core
                     return false;
                 }),
             //when player wants to eat
-            new PlayerAction<bool>("eat", (args) => "eat", (args) => 
+            new PlayerAction<bool>("eat", (args) => "eat $itemName", (args) => 
                 {
                     Player player = (Player)args[1];
                     string[] input = (string[])args[2];
@@ -117,22 +59,21 @@ namespace TextAdventure.Core
             {
                 World world = (World)args[0];
                 Player player = (Player)args[1];
-                List<(int, int, string)> allowedMoves = (List<(int, int, string)>)args[2];
+                List<(int, int, string)> allowedMoves = GetAllowableMoves(world, player);
 
-                string directionOutput = "move <";
+                string directionOutput = "move $";
                 foreach(var move in allowedMoves)
                 {
                     directionOutput += move.Item3 + '|';
                 }
                 directionOutput = directionOutput.TrimEnd('|');
-                directionOutput += ">";
 
                 return directionOutput;
             }, (args) => {
                 World world = (World)args[0];
                 Player player = (Player)args[1];
                 string[] input = (string[])args[2];
-                List<(int, int, string)> allowedMoves = (List<(int, int, string)>)args[3];
+                List<(int, int, string)> allowedMoves = GetAllowableMoves(world, player);
 
                 if(input.Length != 2)
                 {
@@ -157,26 +98,76 @@ namespace TextAdventure.Core
                 world.DisplayMap(player);
                 return false;
             }),
+            //player wants to drop an item
+            new PlayerAction<bool>("drop", (args) => "drop <all> $itemName", (args) => {
+                World world = (World)args[0];
+                Player player = (Player)args[1];
+                string[] input = (string[])args[2];
+
+                string itemName;
+
+                if(input.Length < 2) {
+                    Console.WriteLine("Invalid Argument Length.");
+                } else if(input[1] == "all") {
+                    itemName = string.Join(" ", input.Skip(2));
+                    List<Item> items = player.Inventory.FindAll(x => x.Name == itemName);
+                    if(items.Count == 0) {
+                        Console.WriteLine("You don't have those items!");
+                    } else {
+                        items.ForEach(item => world.EntityDropItem(player, item));
+                        Console.WriteLine($"You dropped {items.Count} {itemName}s.");
+                    }
+                } else {
+                    itemName = string.Join(" ", input.Skip(1));
+                    Item item = player.Inventory.Find(x => x.Name == itemName);
+                    if(item == null) { 
+                        Console.WriteLine("You don't have that item!");
+                    } else {
+                        world.EntityDropItem(player, item);
+                        Console.WriteLine($"You dropped {(item.ForceSingle ? "the" : IsVowel(itemName[0]) ? "an" : "a")} {itemName}.");
+                    }
+                }
+                return false;
+            }),
             //exit from the game
             new PlayerAction<bool>("exit", (args) => "exit", (args) => 
             {
                 System.Environment.Exit(0);
                 return true;
-            }),
-            new PlayerAction<bool>("payday", (args) => "payday", (args) =>
-            {   
-                Player player = (Player)args[1];
-                string[] input = (string[])args[2];
-
-                //check for valid input
-                if(input.Length != 2) {
-                    Console.WriteLine("Invalid Argument Length.");
-                } else if(int.TryParse(input[1], out int result)) {
-                    //pay player
-                    player.GainMoney(result);
-                }
-                return false;
             })
         }.ToList();
+
+        static bool IsVowel(char c)
+        {
+            string vowels = "aeiouAEIOU";
+            foreach(char vowel in vowels)
+            {
+                if(c == vowel) return true;
+            }
+            return false;
+        }
+
+        static List<(int, int, string)> GetAllowableMoves(World world, Player player)
+        {
+            //setup allowable move directions
+            (int, int, string)[] directions = new (int, int, string)[] { (0,1, "south"), (0,-1, "north"), (1,0, "east"), (-1,0, "west") }; //(dirX, dirY, moveName)
+            List<(int, int, string)> allowedMoves = new List<(int, int, string)>();
+
+            foreach(var direction in directions) {
+                int dirX = player.Pos.x + direction.Item1;
+                int dirY = player.Pos.y + direction.Item2;
+
+                //if the direction is out of bounds, then skip it
+                if((dirX < 0 || dirX >= world.Locations.GetLength(0)) || ((dirY < 0 || dirY >= world.Locations.GetLength(1)))) continue;
+                Location location = world.Locations[dirX, dirY];
+
+                //check the tag of the current location
+                if(location == null) continue;
+                //if the location is open, then add it to the allowdMoves
+                if(location.IsOpen(player)) allowedMoves.Add(direction);
+            }
+
+            return allowedMoves;
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace TextAdventure.Core
         public bool ForceSingle { get; private set; }
         public string Tag { get; private set; }
 
-        public Item(string name, string tag = "", bool forceSingle = false, int x = 0, int y = 0, string description = "")
+        public Item(string name, string tag = "", bool forceSingle = false, int x = -1, int y = -1, string description = "")
         {
             Name = name;
             Tag = tag;

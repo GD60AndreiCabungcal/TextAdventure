@@ -11,7 +11,7 @@ namespace TextAdventure.Core
         public string Name { get; set; }
         public Position Pos { get; set; }
         protected int health;
-        public int Health { get { return health; } protected set { Math.Max(0, value); } }
+        public int Health { get { return health; } protected set { health = Math.Max(0, value); } }
         protected int armor;
         public int Armor
         {
@@ -27,6 +27,7 @@ namespace TextAdventure.Core
                 return armorPoints;
             }
         }
+        public float Money { get; protected set; }
             //used for defending attacks
         public List<Item> Inventory { get; protected set; }
 
@@ -38,7 +39,7 @@ namespace TextAdventure.Core
             Inventory = inventory.ToList();
         }
 
-        public virtual bool TakeDamage(int damage, float critChance = 1) //returns true if entity took damage
+        public virtual bool TakeDamage(Entity damagedBy, int damage, float critChance = 1) //returns true if entity took damage
         {
             //rng is an instance of the Random class
             Random rng = new Random();
@@ -50,31 +51,31 @@ namespace TextAdventure.Core
                 {
                     if(item.GetType() != typeof(Armor)) continue;
                     Armor armor = (Armor)item;
-                    armor.ArmorPoints--;
+                    armor.ArmorPoints -= damage / 2;
                 }
-                Console.WriteLine($"{Name} defended the attack!");
+                Console.WriteLine($"{Name} defended {damagedBy.Name}'s attack!");
                 return false;
             } else {
                 health -= damage;
-                Console.WriteLine($"{Name} took {damage} damage!");
-                if(health <= 0) Die();
+                Console.WriteLine($"{Name} took {damage} damage from {damagedBy.Name}!");
+                if(health <= 0) Die(damagedBy);
                 return true;
             }
         }
 
-        public virtual bool TakeDamage(Weapon weapon)
+        public virtual bool TakeDamage(Entity damagedBy, Weapon weapon)
         {
-            return TakeDamage(weapon.Damage, weapon.CritChance);
+            return TakeDamage(damagedBy, weapon.Damage, weapon.CritChance);
         }
 
-        public virtual void Die()
+        public virtual void Die(Entity killedBy)
         {
-            Console.WriteLine($"{Name} has died!");
+            Console.WriteLine($"{killedBy.Name} has killed {Name}!");
         }
 
         public virtual void Heal(int heal) 
         {
-            Health += heal;
+            health += heal;
             Console.WriteLine($"{Name} healed by {heal} points!");
         }
 
@@ -85,14 +86,17 @@ namespace TextAdventure.Core
             Inventory.Remove(food);
         }
 
-        public virtual void Interact(World world, Entity entity)
-        {
-
-        }
-
         public override string ToString()
         {
-            return $"{Name}({health}HP)";
+            return $"{Name}({health}HP){(Armor > 0 ? $"({Armor}Amr)" : "")}";
         }
+
+        public void GainMoney(float amount)
+        {
+            Money += amount;
+            Console.WriteLine($"{Name} got paid ${amount}!");
+        }
+
+        public virtual void Interact(World world, Entity entity) { }
     }
 }

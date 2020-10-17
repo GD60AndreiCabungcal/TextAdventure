@@ -2,6 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+
+//package for json serialization / deserialization
+using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TextAdventure.Core
 {
@@ -11,6 +16,12 @@ namespace TextAdventure.Core
         public Location[,] Locations { get; private set; }
         public List<Entity> Entities { get; set; }
         public List<Item> Items { get; set; }
+
+        //settings for serialization / deserialization
+        static JsonSerializerSettings settings = new JsonSerializerSettings()
+        {
+             TypeNameHandling = TypeNameHandling.Objects
+        };
 
         public World(string name, Location[,] locations, List<Entity> entities, List<Item> items)
         {
@@ -52,8 +63,18 @@ namespace TextAdventure.Core
         public void EntityGetItem(Entity entity, Item item)
         {
             if(entity.Pos == item.Pos) {
+                item.Pos = new Position(-1, -1);
                 entity.Inventory.Add(item);
                 Items.Remove(item);
+            }
+        }
+
+        public void EntityDropItem(Entity entity, Item item)
+        {
+            if(entity.Inventory.Contains(item)) {
+                item.Pos = entity.Pos;
+                Items.Add(item);
+                entity.Inventory.Remove(item);
             }
         }
 
@@ -149,10 +170,11 @@ namespace TextAdventure.Core
                         entries.Add((weapons[i].Name, i));
                         decisions.Add(weapons[i].Name);
                     }
-                    int weaponIndex = isPlayer ? DecisionHandler.MakeDecision(decisions, "") : rng.Next(entries.Count);
+                    int weaponIndex = isPlayer ? DecisionHandler.MakeDecision(decisions.ToArray(), "") : rng.Next(entries.Count);
                     weapon = weapons[entries[weaponIndex].Item2];
 
                     if(isPlayer) Console.WriteLine("Who do you want to attack?");
+
                     //setup decisons for which entity to attack
                     entries = new List<(string, int)>();
                     decisions = new List<string>();
@@ -163,17 +185,17 @@ namespace TextAdventure.Core
                         entries.Add((entities[i].Name, i));
                         decisions.Add(entities[i].Name);
                     }
-                    int entityIndex = isPlayer ? DecisionHandler.MakeDecision(decisions, "") : rng.Next(entries.Count);
+                    
+                    int entityIndex = isPlayer ? DecisionHandler.MakeDecision(decisions.ToArray(), "") : rng.Next(entries.Count);
                     defender = entities[entries[entityIndex].Item2];
 
                     //offender attacks defender with weapon
                     Console.WriteLine($"{offender.Name} attacked {defender.Name} with {weapon.Name}!");
-                    defender.TakeDamage(weapon);
+                    defender.TakeDamage(offender, weapon);
 
                     //check if defender is dead
                     if(defender.Health <= 0)
                     {
-                        Console.WriteLine($"{offender.Name} killed {defender.Name}!");
                         fightActive = false;
                         Entities.Remove(defender);
                     }
@@ -185,16 +207,66 @@ namespace TextAdventure.Core
         public void DisplayMap(Player player)
         {
             Console.WriteLine($"- - -({Name})- - -");
+
+            //initalizing the legend of the map
+            List<string> legend = new List<string>();
+            legend.Add("X - You are here");
+            for(int row = 0; row < Locations.GetLength(0); row++)
+            {
+                for(int col = 0; col < Locations.GetLength(1); col++)
+                {   
+                    Location location = Locations[row, col];
+                    if(location == null) continue;
+                    string entry = $"{location.MapIcon()} - {location.GetType().Name}";
+                    if(!legend.Contains(entry)) {
+                        legend.Add(entry);
+                    }
+                }
+            }
+
+            //generate map
             for(int row = 0; row < Locations.GetLength(0); row++)
             {
                 for(int col = 0; col < Locations.GetLength(1); col++)
                 {
+                    char mapIcon = ' ';
                     Location location = Locations[col, row];
-                    Console.Write(location == GetLocation(player) ? "X" : location != null ? location.MapIcon() : " ");
+                    if (location == null) {
+
+                    } else if(location.Equals(GetLocation(player))) {
+                        mapIcon = 'X';
+                    } else {
+                        mapIcon = location.MapIcon();
+                    }
+                    Console.Write(mapIcon);
                 }
                 Console.WriteLine();
             }
             Console.WriteLine($"- - -({Name})- - -");
+            foreach(string entry in legend) Console.WriteLine(entry);
+        }
+        
+        public static World Load(string path)
+        {
+            //get file from path and read all text from it
+            string json = File.ReadAllText(path);
+
+            //deserialize json into world object
+            World world = JsonConvert.DeserializeObject<World>(json, settings);
+            return world;
+        }
+
+        public void Save(string path)
+        {
+            //open or create file, then dispose the filestream
+            FileStream fs = File.Open(path, FileMode.OpenOrCreate);
+            fs.Dispose();
+
+            //get json from world object
+            string json = JsonConvert.SerializeObject(this, Formatting.Indented, settings);
+            
+            //write world json to file
+            File.WriteAllText(path, json);
         }
     }
 }

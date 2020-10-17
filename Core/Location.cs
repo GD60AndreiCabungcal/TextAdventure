@@ -8,12 +8,18 @@ namespace TextAdventure.Core
     public class Location
     {
         public string Name { get; private set; }
-        public string Description { get; private set; }        
+        public string Description { get; private set; }
+        public string Tag { get; protected set; }  
 
         public Location(string name, string description)
         {
             Name = name;
             Description = description;
+        }
+
+        public virtual bool IsOpen(Player player)
+        {
+            return true;
         }
 
         public virtual void LocationEvent(World world, Player player)
@@ -38,9 +44,9 @@ namespace TextAdventure.Core
             if(itemIndex != items.Count) world.EntityGetItem(player, items[itemIndex]);
         }
 
-        public virtual string MapIcon()
+        public virtual char MapIcon()
         {
-            return "*";
+            return '*';
         }
     }
 }

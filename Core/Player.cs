@@ -2,22 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 
 namespace TextAdventure.Core
 {
     public class Player : Entity
     {
-        public float Money { get; private set; }
-
         public Player(string name = "Unknown", int x = 0, int y = 0) : base(name, x, y) 
         {
             Money = 15;
         }
 
-        public override void Die()
+        public override void Die(Entity killedBy)
         {
             Console.WriteLine("A hero has fallen.");
+            Console.WriteLine("Press any key to quit application...");
+            Console.ReadLine();
             System.Environment.Exit(0);
         }
 
@@ -32,11 +32,5 @@ namespace TextAdventure.Core
         }
 
         public void PurchaceItem(ShopItem shopItem) => PurchaceItem(shopItem.item, shopItem.price);
-
-        public void GainMoney(int amount)
-        {
-            Money += amount;
-            Console.WriteLine($"{Name} got paid ${amount}!");
-        }
     }
 }

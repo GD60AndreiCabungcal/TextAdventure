@@ -1,0 +1,453 @@
+{
+  "$type": "TextAdventure.Core.World, TextAdventure",
+  "Name": "Overworld",
+  "Locations": [
+    [
+      null,
+      {
+        "$type": "TextAdventure.Core.Shop, TextAdventure",
+        "Owner": {
+          "$type": "TextAdventure.Core.Merchant, TextAdventure",
+          "Name": "Billy",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": 0,
+            "y": 0
+          },
+          "Health": 10,
+          "Armor": 0,
+          "Money": 0,
+          "Inventory": []
+        },
+        "ShopItems": [
+          {
+            "$type": "TextAdventure.Core.ShopItem, TextAdventure",
+            "item": {
+              "$type": "TextAdventure.Core.Armor, TextAdventure",
+              "ArmorPoints": 2,
+              "Name": "Gold Pants",
+              "Pos": {
+                "$type": "TextAdventure.Core.Position, TextAdventure",
+                "x": 0,
+                "y": 0
+              },
+              "Description": "Very shiny.",
+              "ForceSingle": true,
+              "Tag": "Pants"
+            },
+            "price": 5
+          },
+          {
+            "$type": "TextAdventure.Core.ShopItem, TextAdventure",
+            "item": {
+              "$type": "TextAdventure.Core.Food, TextAdventure",
+              "HealPoints": 10,
+              "Name": "Shiny Apple",
+              "Pos": {
+                "$type": "TextAdventure.Core.Position, TextAdventure",
+                "x": 0,
+                "y": 0
+              },
+              "Description": "",
+              "ForceSingle": false,
+              "Tag": "Food"
+            },
+            "price": 7
+          },
+          {
+            "$type": "TextAdventure.Core.ShopItem, TextAdventure",
+            "item": {
+              "$type": "TextAdventure.Core.Weapon, TextAdventure",
+              "Damage": 6,
+              "CritChance": 0.8,
+              "Name": "Beat Stick",
+              "Pos": {
+                "$type": "TextAdventure.Core.Position, TextAdventure",
+                "x": 0,
+                "y": 0
+              },
+              "Description": "",
+              "ForceSingle": true,
+              "Tag": "Weapon"
+            },
+            "price": 10
+          }
+        ],
+        "Name": "Castle Shop",
+        "Description": "It's very high up here.",
+        "Tag": "Shop"
+      },
+      null,
+      {
+        "$type": "TextAdventure.Core.Location, TextAdventure",
+        "Name": "Grass",
+        "Description": "Just plain grass.",
+        "Tag": null
+      },
+      {
+        "$type": "TextAdventure.Core.Location, TextAdventure",
+        "Name": "Starting area",
+        "Description": "Just plain grass.",
+        "Tag": null
+      }
+    ],
+    [
+      null,
+      {
+        "$type": "TextAdventure.Core.Location, TextAdventure",
+        "Name": "Castle Road",
+        "Description": "Villagers croud the streets, and guards patrol and roam.",
+        "Tag": null
+      },
+      null,
+      {
+        "$type": "TextAdventure.Core.Location, TextAdventure",
+        "Name": "Grass",
+        "Description": "Just plain grass.",
+        "Tag": null
+      },
+      null
+    ],
+    [
+      null,
+      {
+        "$type": "TextAdventure.Core.Location, TextAdventure",
+        "Name": "Castle Well",
+        "Description": "Serenader's play lovely music around the well.",
+        "Tag": null
+      },
+      {
+        "$type": "TextAdventure.Core.Door, TextAdventure",
+        "IsUnlocked": false,
+        "Passwords": [
+          "Key1"
+        ],
+        "Name": "Strong Wall",
+        "Description": "Strong. Barrier.",
+        "Tag": "Door"
+      },
+      {
+        "$type": "TextAdventure.Core.Location, TextAdventure",
+        "Name": "Grass",
+        "Description": "Just plain grass.",
+        "Tag": null
+      },
+      null
+    ],
+    [
+      {
+        "$type": "TextAdventure.Core.Location, TextAdventure",
+        "Name": "Grass",
+        "Description": "Just plain grass.",
+        "Tag": null
+      },
+      {
+        "$type": "TextAdventure.Core.Location, TextAdventure",
+        "Name": "Castle Road",
+        "Description": "Villagers croud the streets, and guards patrol and roam.",
+        "Tag": null
+      },
+      null,
+      {
+        "$type": "TextAdventure.Core.Shop, TextAdventure",
+        "Owner": {
+          "$type": "TextAdventure.Core.Merchant, TextAdventure",
+          "Name": "Merchant",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": 0,
+            "y": 0
+          },
+          "Health": 10,
+          "Armor": 0,
+          "Money": 0,
+          "Inventory": []
+        },
+        "ShopItems": [
+          {
+            "$type": "TextAdventure.Core.ShopItem, TextAdventure",
+            "item": {
+              "$type": "TextAdventure.Core.Food, TextAdventure",
+              "HealPoints": 2,
+              "Name": "Apple",
+              "Pos": {
+                "$type": "TextAdventure.Core.Position, TextAdventure",
+                "x": 0,
+                "y": 0
+              },
+              "Description": "",
+              "ForceSingle": false,
+              "Tag": "Food"
+            },
+            "price": 2
+          },
+          {
+            "$type": "TextAdventure.Core.ShopItem, TextAdventure",
+            "item": {
+              "$type": "TextAdventure.Core.Food, TextAdventure",
+              "HealPoints": 3,
+              "Name": "Shiny Carrot",
+              "Pos": {
+                "$type": "TextAdventure.Core.Position, TextAdventure",
+                "x": 0,
+                "y": 0
+              },
+              "Description": "",
+              "ForceSingle": false,
+              "Tag": "Food"
+            },
+            "price": 3
+          },
+          {
+            "$type": "TextAdventure.Core.ShopItem, TextAdventure",
+            "item": {
+              "$type": "TextAdventure.Core.Weapon, TextAdventure",
+              "Damage": 2,
+              "CritChance": 0.3,
+              "Name": "Stone Sword",
+              "Pos": {
+                "$type": "TextAdventure.Core.Position, TextAdventure",
+                "x": 0,
+                "y": 0
+              },
+              "Description": "",
+              "ForceSingle": true,
+              "Tag": "Weapon"
+            },
+            "price": 5
+          },
+          {
+            "$type": "TextAdventure.Core.ShopItem, TextAdventure",
+            "item": {
+              "$type": "TextAdventure.Core.Armor, TextAdventure",
+              "ArmorPoints": 2,
+              "Name": "Tin Helmet",
+              "Pos": {
+                "$type": "TextAdventure.Core.Position, TextAdventure",
+                "x": 0,
+                "y": 0
+              },
+              "Description": "",
+              "ForceSingle": true,
+              "Tag": "Helmet"
+            },
+            "price": 4
+          }
+        ],
+        "Name": "Merchant Shop",
+        "Description": "",
+        "Tag": "Shop"
+      },
+      null
+    ],
+    [
+      null,
+      {
+        "$type": "TextAdventure.Core.Location, TextAdventure",
+        "Name": "Castle Road",
+        "Description": "Villagers croud the streets, and guards patrol and roam.",
+        "Tag": null
+      },
+      null,
+      {
+        "$type": "TextAdventure.Core.Location, TextAdventure",
+        "Name": "Grass",
+        "Description": "Just plain grass.",
+        "Tag": null
+      },
+      null
+    ]
+  ],
+  "Entities": [
+    {
+      "$type": "TextAdventure.Core.Player, TextAdventure",
+      "Name": "",
+      "Pos": {
+        "$type": "TextAdventure.Core.Position, TextAdventure",
+        "x": 0,
+        "y": 4
+      },
+      "Health": 10,
+      "Armor": 0,
+      "Money": 15,
+      "Inventory": [
+        {
+          "$type": "TextAdventure.Core.Weapon, TextAdventure",
+          "Damage": 100,
+          "CritChance": 1,
+          "Name": "God Sword",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": 0,
+            "y": 0
+          },
+          "Description": "",
+          "ForceSingle": true,
+          "Tag": "Sword"
+        }
+      ]
+    },
+    {
+      "$type": "TextAdventure.Core.Enemy, TextAdventure",
+      "Name": "Bababouy",
+      "Pos": {
+        "$type": "TextAdventure.Core.Position, TextAdventure",
+        "x": 0,
+        "y": 3
+      },
+      "Health": 10,
+      "Armor": 0,
+      "Money": 13.75,
+      "Inventory": []
+    },
+    {
+      "$type": "TextAdventure.Core.Enemy, TextAdventure",
+      "Name": "Gogy",
+      "Pos": {
+        "$type": "TextAdventure.Core.Position, TextAdventure",
+        "x": 2,
+        "y": 1
+      },
+      "Health": 10,
+      "Armor": 4,
+      "Money": 10.15,
+      "Inventory": [
+        {
+          "$type": "TextAdventure.Core.Weapon, TextAdventure",
+          "Damage": 3,
+          "CritChance": 1,
+          "Name": "Strong Axe",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "Beware the axe.",
+          "ForceSingle": true,
+          "Tag": "Sword"
+        },
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 4,
+          "Name": "Shiny Chestplate",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": 0,
+            "y": 0
+          },
+          "Description": "",
+          "ForceSingle": true,
+          "Tag": "Chestplate"
+        }
+      ]
+    },
+    {
+      "$type": "TextAdventure.Core.Enemy, TextAdventure",
+      "Name": "Bogo",
+      "Pos": {
+        "$type": "TextAdventure.Core.Position, TextAdventure",
+        "x": 4,
+        "y": 1
+      },
+      "Health": 15,
+      "Armor": 4,
+      "Money": 7.35,
+      "Inventory": [
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 5,
+          "Name": "Strong Chestplate",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "",
+          "ForceSingle": true,
+          "Tag": "Chestplate"
+        },
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 1,
+          "Name": "Strong Boots",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "",
+          "ForceSingle": true,
+          "Tag": "Boots"
+        }
+      ]
+    },
+    {
+      "$type": "TextAdventure.Core.Enemy, TextAdventure",
+      "Name": "Goma",
+      "Pos": {
+        "$type": "TextAdventure.Core.Position, TextAdventure",
+        "x": 25,
+        "y": 1
+      },
+      "Health": 10,
+      "Armor": 4,
+      "Money": 7,
+      "Inventory": [
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 3,
+          "Name": "Strong Helmet",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "",
+          "ForceSingle": true,
+          "Tag": "Helmet"
+        },
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 4,
+          "Name": "Strong Pants",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "",
+          "ForceSingle": true,
+          "Tag": "Pants"
+        }
+      ]
+    }
+  ],
+  "Items": [
+    {
+      "$type": "TextAdventure.Core.Armor, TextAdventure",
+      "ArmorPoints": 3,
+      "Name": "Wooly Cloak",
+      "Pos": {
+        "$type": "TextAdventure.Core.Position, TextAdventure",
+        "x": 1,
+        "y": 3
+      },
+      "Description": "",
+      "ForceSingle": true,
+      "Tag": "Chestplate"
+    },
+    {
+      "$type": "TextAdventure.Core.Key, TextAdventure",
+      "Password": "Key1",
+      "Name": "Door Key",
+      "Pos": {
+        "$type": "TextAdventure.Core.Position, TextAdventure",
+        "x": 4,
+        "y": 3
+      },
+      "Description": "",
+      "ForceSingle": false,
+      "Tag": "Key"
+    }
+  ]
+}

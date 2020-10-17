@@ -7,6 +7,7 @@ namespace TextAdventure.Core
 {
     public class DecisionHandler
     {
+        //player makes a decision
         public static int MakeDecision(string[] decisions, string[] answers) 
         {
             //user's answer
@@ -46,34 +47,15 @@ namespace TextAdventure.Core
             return MakeDecision(decisions, answers);
         }
 
-        public static int MakeDecision(List<string> decisions, List<string> answers) { return MakeDecision(decisions.ToArray(), answers.ToArray()); }
-        public static int MakeDecision(List<string> decisions, string answer) { return MakeDecision(decisions.ToArray(), answer); }
-
         public static void GetInput(World world, Player player)
         {
             //prompt user what to do
             Console.WriteLine($"What would you like to do{(string.IsNullOrEmpty(player.Name) ? "?" : $", {player.Name}?")}");
 
-            //setup for move command
-            (int, int, string)[] directions = new (int, int, string)[] { (0,1, "south"), (0,-1, "north"), (1,0, "east"), (-1,0, "west") };
-            List<(int, int, string)> allowedMoves = new List<(int, int, string)>();
-
-            foreach(var direction in directions) {
-                int dirX = player.Pos.x + direction.Item1;
-                int dirY = player.Pos.y + direction.Item2;
-
-                //if the direction is out of bounds, then skip it
-                if((dirX < 0 || dirX >= world.Locations.GetLength(0)) || ((dirY < 0 || dirY >= world.Locations.GetLength(1)))) continue;
-
-                if(world.Locations[dirX, dirY] != null) {
-                    allowedMoves.Add(direction);
-                }
-            }
-
             //display each action available to the player
             foreach(PlayerAction<bool> action in GameDictionary.defaultCommands)
             {
-                Console.WriteLine(action.Display(world, player, allowedMoves));
+                Console.WriteLine(action.Display(world, player));
             }
 
             //action loop
@@ -85,7 +67,7 @@ namespace TextAdventure.Core
                 PlayerAction<bool> action = GameDictionary.defaultCommands.Find((x) => x.Name == input[0].ToLower());
                 if(action != null) 
                 {
-                    bool result = action.Do(world, player, input, allowedMoves);
+                    bool result = action.Do(world, player, input);
                     if(result) break; //if the result is true, the action loop will terminate
                 }
             }
