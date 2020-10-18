@@ -5,11 +5,14 @@ using System.Linq;
 
 namespace TextAdventure.Core
 {
-    public class GameDictionary
+    public class CommandHandler
     {
-        static List<(int, int, string)> allowedMoves = new List<(int, int, string)>();
-        
+                
+        //directions for player movement
+        static (int, int, string)[] directions = new (int, int, string)[] { (0,1, "south"), (0,-1, "north"), (1,0, "east"), (-1,0, "west") }; //(dirX, dirY, moveName)
 
+        //list of all allowed moves to the player
+        static List<(int, int, string)> allowedMoves = new List<(int, int, string)>();
         /*
         list of all the actions available to the player
         PlayerAction<turnPersist>
@@ -17,7 +20,7 @@ namespace TextAdventure.Core
         */
         public static List<PlayerAction<bool>> defaultCommands = new PlayerAction<bool>[]
         {
-            //when player wnats to check their stats
+            //when player wants to check their stats
             new PlayerAction<bool>("stats", (args) => "stats", (args) => 
                 {   
                     Player player = (Player)args[1];
@@ -64,8 +67,23 @@ namespace TextAdventure.Core
             {
                 World world = (World)args[0];
                 Player player = (Player)args[1];
-                allowedMoves = GetAllowableMoves(world, player);
 
+                //repopulate allowed moves
+                allowedMoves.Clear();
+                foreach(var direction in directions) 
+                {
+                    int dirX = player.Pos.x + direction.Item1;
+                    int dirY = player.Pos.y + direction.Item2;
+
+                    Location location = world.GetLocation(dirX, dirY);
+
+                    //skip over null locations (used as walls)
+                    if(location == null) continue;
+                    //if the location is open, then add it to the allowdMoves
+                    if(location.IsOpen) allowedMoves.Add(direction);
+                }
+
+                //setup move command for player
                 string directionOutput = "move $";
                 foreach(var move in allowedMoves)
                 {
@@ -163,8 +181,9 @@ namespace TextAdventure.Core
                 return result + " with fists|$itemName";
             }, (args) => {
 
-                Weapon weapon = (Weapon)args[0];
+                World world = (World)args[0];
                 Player player = (Player)args[1];
+                Weapon weapon = (Weapon)args[2];
                 Entity defender = (Entity)args[3];
 
                 if(weapon == null || defender == null)
@@ -175,14 +194,17 @@ namespace TextAdventure.Core
                 }
 
                 //damage defender
-                defender.TakeDamage(player, weapon);
+                defender.TakeDamage(world, player, weapon);
                 //end turn, continue battle
                 return (false, true);
             }),
-            //when player wants to eat food; eating food take up a turn
+            //when player wants to eat food; eating food takes up a turn
             new PlayerAction<(bool, bool)>("eat", (args) => "eat $itemName", (args) => {
+                World world = (World)args[0];
                 Player player = (Player)args[1];
-                string[] input = (string[])args[2];
+                Weapon weapon = (Weapon)args[2];
+                Entity defender = (Entity)args[3];
+                string[] input = (string[])args[4];
 
                 if(input.Length < 2) {
                     Console.WriteLine("Invalid Argument Length.");
@@ -190,8 +212,8 @@ namespace TextAdventure.Core
                     return (true, true);
                 } else if (player.Inventory.Count(x => x.GetType() == typeof(Food)) <= 0) {
                     Console.WriteLine("You have no food!");
-                    //end turn, continue battle
-                    return (false, true);
+                    //continue turn, continue battle
+                    return (true, true);
                 }
                 Food food = (Food)player.Inventory.Find(x => x.GetType() == typeof(Food) && x.Name.Replace(" ", "").ToLower() == string.Join("", input.Skip(1)).ToLower());
                 player.Heal(food);
@@ -200,7 +222,11 @@ namespace TextAdventure.Core
             }),
             //when the player wants to check their inventory; it doesn't take up a turn
             new PlayerAction<(bool, bool)>("inventory", (args) => "inventory", (args) => {   
+                World world = (World)args[0];
                 Player player = (Player)args[1];
+                Weapon weapon = (Weapon)args[2];
+                Entity defender = (Entity)args[3];
+                string[] input = (string[])args[4];
 
                 string inventory = "";
                 foreach(Item item in player.Inventory)
@@ -217,9 +243,6 @@ namespace TextAdventure.Core
                 return (false, false);
             })
         }.ToList();
-        
-        //dirrections for player movement
-        static (int, int, string)[] directions = new (int, int, string)[] { (0,1, "south"), (0,-1, "north"), (1,0, "east"), (-1,0, "west") }; //(dirX, dirY, moveName)
 
         static bool IsVowel(char c)
         {
@@ -229,26 +252,6 @@ namespace TextAdventure.Core
                 if(c == vowel) return true;
             }
             return false;
-        }
-
-        static List<(int, int, string)> GetAllowableMoves(World world, Player player)
-        {
-            allowedMoves.Clear();
-
-            foreach(var direction in directions) 
-            {
-                int dirX = player.Pos.x + direction.Item1;
-                int dirY = player.Pos.y + direction.Item2;
-
-                Location location = world.GetLocation(dirX, dirY);
-
-                //check the tag of the current location
-                if(location == null) continue;
-                //if the location is open, then add it to the allowdMoves
-                if(location.IsOpen) allowedMoves.Add(direction);
-            }
-
-            return allowedMoves;
         }
     }
 }

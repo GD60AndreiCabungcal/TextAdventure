@@ -34,10 +34,8 @@ namespace TextAdventure.Core
                     allWeapons.Add(new Weapon("Fists", 1, 0));
                     //the weapon that the offender chooses
                     Weapon selectedWeapon = null;
-                    //if the entity's turn should continue
-                    bool turnPersist = false;
 
-                    //attack as the player
+                    //the player attacks
                     if(offender is Player) {
 
                         Console.WriteLine();
@@ -49,7 +47,7 @@ namespace TextAdventure.Core
                         Console.WriteLine();
 
                         //display all actions to the player
-                        foreach(var action in GameDictionary.battleCommands) {
+                        foreach(var action in CommandHandler.battleCommands) {
                             Console.WriteLine(action.Display(offender, allDefenders));
                         }
 
@@ -67,11 +65,12 @@ namespace TextAdventure.Core
                             selectedDefender = allDefenders.ToList().Find(defender => defender.Name.ToLower() == defenderName.ToLower());
                             selectedWeapon = allWeapons.ToList().Find(weapon => weapon.Name.ToLower() == weaponName.ToLower());
 
-                            var action = GameDictionary.battleCommands.Find((x) => x.Name == input[0].ToLower());
+                            var action = CommandHandler.battleCommands.Find((x) => x.Name == input[0].ToLower());
                             //run the command
                             if(action != null) 
                             {
-                                (bool, bool) result = action.Do(selectedWeapon, offender, input.ToArray(), selectedDefender);
+                               //(turnPersist, gamePersist)
+                                (bool, bool) result = action.Do(world, offender, selectedWeapon, selectedDefender, input.ToArray());
                                 if(!result.Item2) return; //end battle
                                 else if(!result.Item1) break; //end turn
                                  
@@ -84,16 +83,15 @@ namespace TextAdventure.Core
                         selectedWeapon = allWeapons[rng.Next(allWeapons.Count)];
 
                         //defender takes damage
-                        selectedDefender.TakeDamage(offender, selectedWeapon);
+                        selectedDefender.TakeDamage(world, offender, selectedWeapon);
                     }
 
                     //check if defender is dead
-                    if(!turnPersist && selectedDefender == null) {
+                    if(selectedDefender == null) {
                         continue;
                     }
                     if(selectedDefender.Health <= 0) {
-                        //remove the defender from the world
-                        world.Entities.Remove(selectedDefender);
+                        //remove the defender from combatants and allDefenders
                         combatants.Remove(selectedDefender);
                         allDefenders.Remove(selectedDefender);
                     }

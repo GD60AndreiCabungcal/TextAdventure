@@ -34,11 +34,5 @@ namespace TextAdventure.Core
             //start battle
             Simulator.StartBattle(world, entities);
         }
-
-        public override void Die(Entity killedBy)
-        {
-            base.Die(killedBy);
-            killedBy.GainMoney(Money);
-        }
     }
 }

@@ -28,6 +28,7 @@ public class Program
         get location: world.Locations[x,y]
 
         */
+        //generates world from worldPath
         World world = World.Load(worldPath);
         //player will always be the 1st entity in a world
         Player player = (Player)world.Entities[0];
@@ -35,16 +36,14 @@ public class Program
         /* --- START OF GAME --- */
         Console.WriteLine("Hello traveler! What is your name?");
         player.Name = Console.ReadLine();
-        Console.WriteLine($"Nice to meet you, {player.Name}. There's a few shops to the east if you want to check them out.");
+        Console.WriteLine($"Nice to meet you, {player.Name}. Good luck on your adventure!");
         //game loop
         while(true) 
         {
             //interact with entities
             world.EntityInteract(player);
             //play the location event
-            //world.GetLocation(player).LocationEvent(world, player);
-            Location location = world.GetLocation(player);
-            location.LocationEvent(world, player);
+            world.GetLocation(player).LocationEvent(world, player);
             //promp the player where to go next
             DecisionHandler.GetInput(world, player);
         }

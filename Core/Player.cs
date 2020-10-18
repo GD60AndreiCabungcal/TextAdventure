@@ -13,7 +13,7 @@ namespace TextAdventure.Core
             Money = 15;
         }
 
-        public override void Die(Entity killedBy)
+        public override void Die(World world, Entity killedBy)
         {
             Console.WriteLine("A hero has fallen.");
             Console.WriteLine("Press any key to quit application...");

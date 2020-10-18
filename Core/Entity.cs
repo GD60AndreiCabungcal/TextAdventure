@@ -55,7 +55,7 @@ namespace TextAdventure.Core
         }
 
         //when entity takes damage
-        public virtual bool TakeDamage(Entity damagedBy, Weapon weapon) //returns true if entity took damage
+        public virtual bool TakeDamage(World world, Entity damagedBy, Weapon weapon) //returns true if entity took damage
         {
             //rng is an instance of the Random class
             Random rng = new Random();
@@ -78,20 +78,26 @@ namespace TextAdventure.Core
                 Console.Write($"{Name} took {weapon.Damage} damage");
                 if(didCrit)
                 {
-                    int critDamage = weapon.Damage / 2;
+                    int critDamage = (weapon.Damage / 2) + 1;
                     Health -= critDamage;
                     Console.Write($" + {critDamage} critical damage");
                 }
                 Console.WriteLine($" from {damagedBy.Name}'s {weapon.Name}!");
-                if(health <= 0) Die(damagedBy);
+                if(health <= 0) Die(world, damagedBy);
                 return true;
             }
         }
 
         //when entity dies
-        public virtual void Die(Entity killedBy)
+        public virtual void Die(World world, Entity killedBy)
         {
             Console.WriteLine($"{killedBy.Name} has killed {Name}!");
+            //entity drops all their items
+            for(int i = 0; i < Inventory.Count; i++) world.EntityDropItem(this, Inventory[0]);
+            //killedBy gains money
+            killedBy.GainMoney(Money);
+            //entity gets remove from the world
+            world.Entities.Remove(this);
         }
 
         //when entity heals

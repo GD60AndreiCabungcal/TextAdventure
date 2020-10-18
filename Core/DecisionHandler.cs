@@ -53,7 +53,7 @@ namespace TextAdventure.Core
             Console.WriteLine($"What would you like to do{(string.IsNullOrEmpty(player.Name) ? "?" : $", {player.Name}?")}");
 
             //display all actions to the player
-            foreach(PlayerAction<bool> action in GameDictionary.defaultCommands)
+            foreach(PlayerAction<bool> action in CommandHandler.defaultCommands)
             {
                 Console.WriteLine(action.Display(world, player));
             }
@@ -64,7 +64,7 @@ namespace TextAdventure.Core
             {
                 input = Console.ReadLine().Split(' ');
 
-                PlayerAction<bool> action = GameDictionary.defaultCommands.Find((x) => x.Name == input[0].ToLower());
+                PlayerAction<bool> action = CommandHandler.defaultCommands.Find((x) => x.Name == input[0].ToLower());
                 if(action != null) 
                 {
                     bool result = action.Do(world, player, input);
