@@ -9,7 +9,8 @@ namespace TextAdventure.Core
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public string Tag { get; protected set; }  
+        public string Tag { get; protected set; }
+        public bool IsOpen { get; protected set; } = true;
 
         public Location(string name, string description)
         {
@@ -17,31 +18,58 @@ namespace TextAdventure.Core
             Description = description;
         }
 
-        public virtual bool IsOpen(Player player)
-        {
-            return true;
-        }
-
+        //when the player is at this location
         public virtual void LocationEvent(World world, Player player)
         {
             //display location
             Console.WriteLine($"\n{Name}:\n{Description}\n");
 
+            //for adjacent locations
+            int[,] directions = new int[,] { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
+
             //find any items
             List<Item> items = world.Items.FindAll(item => world.GetLocation(item) == this);
-            if(items.Count <= 0) return;
+            //if there are any items, prompt user if they want to get an item
+            if(items.Count > 0) {
+                Console.WriteLine($"{player.Name}, there are items here! what will you pick up?");
 
-            //prompt user if they want to get an item
-            Console.WriteLine($"{player.Name}, there are items here! what will you pick up?");
-
-            string[] decisions = new string[items.Count + 1];
-            for(int i = 0; i < decisions.Length; i++)
-            {
-                decisions[i] = i < items.Count ? items[i].Name : "Nothing";
+                //item pickup loop
+                while(true)
+                {
+                    //setup decisions for the player
+                    string[] decisions = new string[items.Count + 1];
+                    for(int i = 0; i < decisions.Length; i++)
+                    {
+                        decisions[i] = i < items.Count ? items[i].Name : "Nothing";
+                    }
+                    //prompt player
+                    int itemIndex = DecisionHandler.MakeDecision(decisions, "You picked up");
+                    //if player chooses the last option, then they don't pick up anything
+                    if(itemIndex != items.Count) {
+                        Item item = items[itemIndex];
+                        world.EntityGetItem(player, item);
+                        items.Remove(item);
+                    } else break;
+                    if(items.Count == 0) break;
+                }
             }
-            int itemIndex = DecisionHandler.MakeDecision(decisions, "You picked up");
-            //if player chooses the last option, then they don't pick up anything
-            if(itemIndex != items.Count) world.EntityGetItem(player, items[itemIndex]);
+
+            //run the adjacent location events
+            for(int i = 0; i < directions.GetLength(0); i++)
+            {
+                int dirX = player.Pos.x + directions[i,0];
+                int dirY = player.Pos.y + directions[i,1];
+
+                Location adjacent = world.GetLocation(dirX, dirY);
+                if(adjacent == null) continue;
+                adjacent.AdjacentEvent(world, player);
+            }
+        }
+
+        //when the player is beside this location
+        protected virtual void AdjacentEvent(World world, Player player)
+        {
+
         }
 
         public virtual char MapIcon()

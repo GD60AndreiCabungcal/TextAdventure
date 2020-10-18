@@ -28,8 +28,8 @@
               "Name": "Gold Pants",
               "Pos": {
                 "$type": "TextAdventure.Core.Position, TextAdventure",
-                "x": 0,
-                "y": 0
+                "x": -1,
+                "y": -1
               },
               "Description": "Very shiny.",
               "ForceSingle": true,
@@ -45,8 +45,8 @@
               "Name": "Shiny Apple",
               "Pos": {
                 "$type": "TextAdventure.Core.Position, TextAdventure",
-                "x": 0,
-                "y": 0
+                "x": -1,
+                "y": -1
               },
               "Description": "",
               "ForceSingle": false,
@@ -63,8 +63,8 @@
               "Name": "Beat Stick",
               "Pos": {
                 "$type": "TextAdventure.Core.Position, TextAdventure",
-                "x": 0,
-                "y": 0
+                "x": -1,
+                "y": -1
               },
               "Description": "",
               "ForceSingle": true,
@@ -262,13 +262,13 @@
     {
       "$type": "TextAdventure.Core.Player, TextAdventure",
       "Name": "",
+      "Team": "Ally",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
         "x": 0,
         "y": 4
       },
       "Health": 10,
-      "Armor": 0,
       "Money": 15,
       "Inventory": [
         {
@@ -278,8 +278,8 @@
           "Name": "God Sword",
           "Pos": {
             "$type": "TextAdventure.Core.Position, TextAdventure",
-            "x": 0,
-            "y": 0
+            "x": -1,
+            "y": -1
           },
           "Description": "",
           "ForceSingle": true,
@@ -290,26 +290,54 @@
     {
       "$type": "TextAdventure.Core.Enemy, TextAdventure",
       "Name": "Bababouy",
+      "Team": "Troll",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
         "x": 0,
         "y": 3
       },
       "Health": 10,
-      "Armor": 0,
       "Money": 13.75,
       "Inventory": []
     },
     {
       "$type": "TextAdventure.Core.Enemy, TextAdventure",
+      "Name": "BoboBua",
+      "Team": "Troll",
+      "Pos": {
+        "$type": "TextAdventure.Core.Position, TextAdventure",
+        "x": 0,
+        "y": 3
+      },
+      "Health": 10,
+      "Money": 10.50,
+      "Inventory": [
+        {
+          "$type": "TextAdventure.Core.Weapon, TextAdventure",
+          "Damage": 2,
+          "CritChance": 0.5,
+          "Name": "Stick",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "",
+          "ForceSingle": true,
+          "Tag": "Weapon"
+        }
+      ]
+    },
+    {
+      "$type": "TextAdventure.Core.Enemy, TextAdventure",
       "Name": "Gogy",
+      "Team": "Kingdom",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
         "x": 2,
         "y": 1
       },
       "Health": 10,
-      "Armor": 4,
       "Money": 10.15,
       "Inventory": [
         {
@@ -344,13 +372,13 @@
     {
       "$type": "TextAdventure.Core.Enemy, TextAdventure",
       "Name": "Bogo",
+      "Team": "Kingdom",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
         "x": 4,
         "y": 1
       },
       "Health": 15,
-      "Armor": 4,
       "Money": 7.35,
       "Inventory": [
         {
@@ -384,13 +412,13 @@
     {
       "$type": "TextAdventure.Core.Enemy, TextAdventure",
       "Name": "Goma",
+      "Team": "Kingdom",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
-        "x": 25,
+        "x": 4,
         "y": 1
       },
       "Health": 10,
-      "Armor": 4,
       "Money": 7,
       "Inventory": [
         {
@@ -439,7 +467,7 @@
     {
       "$type": "TextAdventure.Core.Key, TextAdventure",
       "Password": "Key1",
-      "Name": "Door Key",
+      "Name": "Strong Key",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
         "x": 4,

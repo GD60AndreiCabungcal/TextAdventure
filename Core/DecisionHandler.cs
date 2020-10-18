@@ -52,7 +52,7 @@ namespace TextAdventure.Core
             //prompt user what to do
             Console.WriteLine($"What would you like to do{(string.IsNullOrEmpty(player.Name) ? "?" : $", {player.Name}?")}");
 
-            //display each action available to the player
+            //display all actions to the player
             foreach(PlayerAction<bool> action in GameDictionary.defaultCommands)
             {
                 Console.WriteLine(action.Display(world, player));

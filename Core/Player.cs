@@ -8,7 +8,7 @@ namespace TextAdventure.Core
 {
     public class Player : Entity
     {
-        public Player(string name = "Unknown", int x = 0, int y = 0) : base(name, x, y) 
+        public Player(string name = "Unknown", int x = 0, int y = 0) : base(name, "Ally", x, y) 
         {
             Money = 15;
         }

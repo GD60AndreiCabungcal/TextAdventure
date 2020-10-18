@@ -29,6 +29,7 @@ public class Program
 
         */
         World world = World.Load(worldPath);
+        //player will always be the 1st entity in a world
         Player player = (Player)world.Entities[0];
 
         /* --- START OF GAME --- */
@@ -39,9 +40,11 @@ public class Program
         while(true) 
         {
             //interact with entities
-            world.EntityInteract();
+            world.EntityInteract(player);
             //play the location event
-            world.GetLocation(player).LocationEvent(world, player);
+            //world.GetLocation(player).LocationEvent(world, player);
+            Location location = world.GetLocation(player);
+            location.LocationEvent(world, player);
             //promp the player where to go next
             DecisionHandler.GetInput(world, player);
         }
