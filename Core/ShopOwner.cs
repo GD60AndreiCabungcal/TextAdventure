@@ -5,8 +5,8 @@ using System.Linq;
 
 namespace TextAdventure.Core
 {
-    public class Merchant : Entity
+    public class ShopOwner : Entity
     {
-        public Merchant(string name) : base(name, "None", 0, 0) { }
+        public ShopOwner(string name) : base(name, "None", 0, 0, 0) { }
     }
 }

@@ -40,7 +40,7 @@ namespace TextAdventure.Core
     {
         public string Name { get; private set; }
         public Func<object[], string> Command { get; private set; }
-        Func<object[], T> Trigger { get; set; }
+        public Func<object[], T> Trigger { get; private set; }
 
         public PlayerAction(string name, Func<object[], string> command, Func<object[], T> trigger)
         {

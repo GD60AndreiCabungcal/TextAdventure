@@ -8,7 +8,7 @@ namespace TextAdventure.Core
 {
     public class Player : Entity
     {
-        public Player(string name = "Unknown", int x = 0, int y = 0) : base(name, "Ally", x, y) 
+        public Player(string name = "Unknown", int x = 0, int y = 0) : base(name, "Ally", 10, x, y) 
         {
             Money = 15;
         }
@@ -24,7 +24,7 @@ namespace TextAdventure.Core
         public void PurchaceItem(Item item, float price)
         {
             if(item.ForceSingle && Inventory.Exists(i => i.Tag == item.Tag)) {
-                Console.WriteLine($"You can't have more than 1 of {item.Name}!");
+                Console.WriteLine("You already have an item of a similar type!");
                 return;
             }
             Inventory.Add(item);
@@ -32,5 +32,12 @@ namespace TextAdventure.Core
         }
 
         public void PurchaceItem(ShopItem shopItem) => PurchaceItem(shopItem.item, shopItem.price);
+
+        public void RepairArmor(Armor armor, float price)
+        {
+            armor.Repair();
+            Money -= price;
+        }
+        
     }
 }

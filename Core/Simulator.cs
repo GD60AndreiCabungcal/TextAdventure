@@ -9,8 +9,15 @@ namespace TextAdventure.Core
     {
         public static void StartBattle(World world, params Entity[] entities)
         {
+            //for other entity's decisions
             Random rng = new Random();
+
+            //copy of all the entities in battle
             List<Entity> combatants = entities.ToList();
+
+            //copy of all the player's battle commands
+            List<PlayerAction<(bool, bool)>> battleCommands = new List<PlayerAction<(bool, bool)>>();
+            battleCommands.AddRange(CommandHandler.battleCommands.Select(x => new PlayerAction<(bool, bool)>(x.Name, x.Command, x.Trigger)));
 
             Console.WriteLine("---/FIGHT/---");
             bool battlePersist = true;
@@ -44,11 +51,22 @@ namespace TextAdventure.Core
                         {
                             Console.WriteLine($"{entity}{entity.Team}");
                         }
-                        Console.WriteLine();
+                        Console.WriteLine($"\nWhat would you like to do{(string.IsNullOrEmpty(offender.Name) ? "?" : $", {offender.Name}?")}");
+
+                        //player can't run if at least 1 enemy won't let them escape
+                        Enemy enemy = combatants.OfType<Enemy>().ToList().Find(x => x.CantEscape);
+                        if(enemy != null) {
+                            Console.WriteLine($"You can't run because {enemy.Name} won't let you escape!");
+                            battleCommands.Remove(battleCommands.Find(x => x.Name == "run"));
+                        //add run command back if there are no more enemies don't allow the player to escape
+                        } else {
+                            var runCommand = CommandHandler.battleCommands.Find(x => x.Name == "run");
+                            if(!battleCommands.Exists(x => x.Name == "run")) battleCommands.Add(runCommand);
+                        }
 
                         //display all actions to the player
-                        foreach(var action in CommandHandler.battleCommands) {
-                            Console.WriteLine(action.Display(offender, allDefenders));
+                        foreach(var command in battleCommands) {
+                            Console.WriteLine(command.Display(offender, allDefenders));
                         }
 
                         //action loop
@@ -65,7 +83,7 @@ namespace TextAdventure.Core
                             selectedDefender = allDefenders.ToList().Find(defender => defender.Name.ToLower() == defenderName.ToLower());
                             selectedWeapon = allWeapons.ToList().Find(weapon => weapon.Name.ToLower() == weaponName.ToLower());
 
-                            var action = CommandHandler.battleCommands.Find((x) => x.Name == input[0].ToLower());
+                            var action = battleCommands.Find((x) => x.Name == input[0].ToLower());
                             //run the command
                             if(action != null) 
                             {

@@ -19,7 +19,7 @@ namespace TextAdventure.Core
 
         public override string Stats()
         {
-            return $"{Name}({Damage}Atk {CritChance}Crt)";
+            return $"{Name}({Damage}Atk)({CritChance}Crt)";
         }
     }
 }

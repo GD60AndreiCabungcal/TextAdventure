@@ -7,7 +7,7 @@
       {
         "$type": "TextAdventure.Core.Shop, TextAdventure",
         "Owner": {
-          "$type": "TextAdventure.Core.Merchant, TextAdventure",
+          "$type": "TextAdventure.Core.ShopOwner, TextAdventure",
           "Name": "Billy",
           "Pos": {
             "$type": "TextAdventure.Core.Position, TextAdventure",
@@ -25,13 +25,14 @@
             "item": {
               "$type": "TextAdventure.Core.Armor, TextAdventure",
               "ArmorPoints": 2,
+              "SpeedPoints": 1,
               "Name": "Gold Pants",
               "Pos": {
                 "$type": "TextAdventure.Core.Position, TextAdventure",
                 "x": -1,
                 "y": -1
               },
-              "Description": "Very shiny.",
+              "Description": "Gold n' Sweet.",
               "ForceSingle": true,
               "Tag": "Pants"
             },
@@ -41,14 +42,14 @@
             "$type": "TextAdventure.Core.ShopItem, TextAdventure",
             "item": {
               "$type": "TextAdventure.Core.Food, TextAdventure",
-              "HealPoints": 10,
+              "HealPoints": 7,
               "Name": "Shiny Apple",
               "Pos": {
                 "$type": "TextAdventure.Core.Position, TextAdventure",
                 "x": -1,
                 "y": -1
               },
-              "Description": "",
+              "Description": "Shiny treat, hard to beat.",
               "ForceSingle": false,
               "Tag": "Food"
             },
@@ -66,7 +67,7 @@
                 "x": -1,
                 "y": -1
               },
-              "Description": "",
+              "Description": "This twig does a lotta' damage.",
               "ForceSingle": true,
               "Tag": "Weapon"
             },
@@ -92,7 +93,24 @@
       }
     ],
     [
-      null,
+      {
+        "$type": "TextAdventure.Core.Blacksmith, TextAdventure",
+        "Owner": {
+          "$type": "TextAdventure.Core.ShopOwner, TextAdventure",
+          "Name": "Sir Coalman",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Health": 10,
+          "Inventory": []
+        },
+        "Price": 10.00,
+        "Name": "Castle Blacksmith",
+        "Description": "The armor daycare centre.",
+        "Tag": "Blacksmith"
+      },
       {
         "$type": "TextAdventure.Core.Location, TextAdventure",
         "Name": "Castle Road",
@@ -113,7 +131,7 @@
       {
         "$type": "TextAdventure.Core.Location, TextAdventure",
         "Name": "Castle Well",
-        "Description": "Serenader's play lovely music around the well.",
+        "Description": "Serenaders play lovely music around the well.",
         "Tag": null
       },
       {
@@ -137,9 +155,9 @@
     [
       {
         "$type": "TextAdventure.Core.Location, TextAdventure",
-        "Name": "Grass",
-        "Description": "Just plain grass.",
-        "Tag": null
+        "Name": "Castle",
+        "Description": "Home of King Bubba.",
+        "Tag": "Castle"
       },
       {
         "$type": "TextAdventure.Core.Location, TextAdventure",
@@ -151,7 +169,7 @@
       {
         "$type": "TextAdventure.Core.Shop, TextAdventure",
         "Owner": {
-          "$type": "TextAdventure.Core.Merchant, TextAdventure",
+          "$type": "TextAdventure.Core.ShopOwner, TextAdventure",
           "Name": "Merchant",
           "Pos": {
             "$type": "TextAdventure.Core.Position, TextAdventure",
@@ -175,7 +193,7 @@
                 "x": 0,
                 "y": 0
               },
-              "Description": "",
+              "Description": "An apple a day keeps your foes at bay.",
               "ForceSingle": false,
               "Tag": "Food"
             },
@@ -192,25 +210,25 @@
                 "x": 0,
                 "y": 0
               },
-              "Description": "",
+              "Description": "Shiny treat, easy to beat?",
               "ForceSingle": false,
               "Tag": "Food"
             },
-            "price": 3
+            "price": 4
           },
           {
             "$type": "TextAdventure.Core.ShopItem, TextAdventure",
             "item": {
               "$type": "TextAdventure.Core.Weapon, TextAdventure",
-              "Damage": 2,
-              "CritChance": 0.3,
+              "Damage": 3,
+              "CritChance": 0.4,
               "Name": "Stone Sword",
               "Pos": {
                 "$type": "TextAdventure.Core.Position, TextAdventure",
                 "x": 0,
                 "y": 0
               },
-              "Description": "",
+              "Description": "Useful for easy Troll-Slaying.",
               "ForceSingle": true,
               "Tag": "Weapon"
             },
@@ -221,13 +239,14 @@
             "item": {
               "$type": "TextAdventure.Core.Armor, TextAdventure",
               "ArmorPoints": 2,
+              "SpeedPoints": 4,
               "Name": "Tin Helmet",
               "Pos": {
                 "$type": "TextAdventure.Core.Position, TextAdventure",
                 "x": 0,
                 "y": 0
               },
-              "Description": "",
+              "Description": "Keeps all the propaganda out.",
               "ForceSingle": true,
               "Tag": "Helmet"
             },
@@ -235,7 +254,7 @@
           }
         ],
         "Name": "Merchant Shop",
-        "Description": "",
+        "Description": "The Top One-Stop shop to cop some items.",
         "Tag": "Shop"
       },
       null
@@ -270,25 +289,11 @@
       },
       "Health": 10,
       "Money": 15,
-      "Inventory": [
-        {
-          "$type": "TextAdventure.Core.Weapon, TextAdventure",
-          "Damage": 100,
-          "CritChance": 1,
-          "Name": "God Sword",
-          "Pos": {
-            "$type": "TextAdventure.Core.Position, TextAdventure",
-            "x": -1,
-            "y": -1
-          },
-          "Description": "",
-          "ForceSingle": true,
-          "Tag": "Sword"
-        }
-      ]
+      "Inventory": []
     },
     {
       "$type": "TextAdventure.Core.Enemy, TextAdventure",
+      "CantEscape": false,
       "Name": "Bababouy",
       "Team": "Troll",
       "Pos": {
@@ -297,53 +302,83 @@
         "y": 3
       },
       "Health": 10,
-      "Money": 13.75,
+      "Money": 5.25,
       "Inventory": []
     },
     {
       "$type": "TextAdventure.Core.Enemy, TextAdventure",
-      "Name": "BoboBua",
-      "Team": "Troll",
+      "CantEscape": true,
+      "Name": "???",
+      "Team": "Assassin",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
-        "x": 0,
+        "x": 4,
         "y": 3
       },
-      "Health": 10,
-      "Money": 10.50,
+      "Health": 12,
+      "Money": 15.75,
       "Inventory": [
         {
           "$type": "TextAdventure.Core.Weapon, TextAdventure",
           "Damage": 2,
-          "CritChance": 0.5,
-          "Name": "Stick",
+          "CritChance": 0.9,
+          "Name": "Small Knife",
           "Pos": {
             "$type": "TextAdventure.Core.Position, TextAdventure",
             "x": -1,
             "y": -1
           },
-          "Description": "",
+          "Description": "This blade will kill.",
           "ForceSingle": true,
-          "Tag": "Weapon"
+          "Tag": "Knife"
+        },
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 3,          
+          "SpeedPoints": 6,
+          "Name": "Leather Hood",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "Execute with ease.",
+          "ForceSingle": true,
+          "Tag": "Chestplate"
+        },
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 2,          
+          "SpeedPoints": 3,
+          "Name": "Leather Pants",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "Light and athletic.",
+          "ForceSingle": true,
+          "Tag": "Pants"
         }
       ]
     },
     {
       "$type": "TextAdventure.Core.Enemy, TextAdventure",
-      "Name": "Gogy",
+      "CantEscape": false,
+      "Name": "Sir Baxter",
       "Team": "Kingdom",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
         "x": 2,
         "y": 1
       },
-      "Health": 10,
+      "Health": 15,
       "Money": 10.15,
       "Inventory": [
         {
           "$type": "TextAdventure.Core.Weapon, TextAdventure",
           "Damage": 3,
-          "CritChance": 1,
+          "CritChance": 0.95,
           "Name": "Strong Axe",
           "Pos": {
             "$type": "TextAdventure.Core.Position, TextAdventure",
@@ -352,18 +387,19 @@
           },
           "Description": "Beware the axe.",
           "ForceSingle": true,
-          "Tag": "Sword"
+          "Tag": "Axe"
         },
         {
           "$type": "TextAdventure.Core.Armor, TextAdventure",
-          "ArmorPoints": 4,
+          "ArmorPoints": 3,          
+          "SpeedPoints": 1,
           "Name": "Shiny Chestplate",
           "Pos": {
             "$type": "TextAdventure.Core.Position, TextAdventure",
             "x": 0,
             "y": 0
           },
-          "Description": "",
+          "Description": "Shiny plate, very great.",
           "ForceSingle": true,
           "Tag": "Chestplate"
         }
@@ -371,7 +407,8 @@
     },
     {
       "$type": "TextAdventure.Core.Enemy, TextAdventure",
-      "Name": "Bogo",
+      "CantEscape": false,
+      "Name": "Sir Edwin",
       "Team": "Kingdom",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
@@ -382,28 +419,44 @@
       "Money": 7.35,
       "Inventory": [
         {
+          "$type": "TextAdventure.Core.Weapon, TextAdventure",
+          "Damage": 4,
+          "CritChance": 0.6,
+          "Name": "Strong Lance",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "Long and pointy.",
+          "ForceSingle": true,
+          "Tag": "Sword"
+        },
+        {
           "$type": "TextAdventure.Core.Armor, TextAdventure",
           "ArmorPoints": 5,
+          "SpeedPoints": 0,
           "Name": "Strong Chestplate",
           "Pos": {
             "$type": "TextAdventure.Core.Position, TextAdventure",
             "x": -1,
             "y": -1
           },
-          "Description": "",
+          "Description": "Very Damage Resistant.",
           "ForceSingle": true,
           "Tag": "Chestplate"
         },
         {
           "$type": "TextAdventure.Core.Armor, TextAdventure",
-          "ArmorPoints": 1,
+          "ArmorPoints": 2,
+          "SpeedPoints": 0,
           "Name": "Strong Boots",
           "Pos": {
             "$type": "TextAdventure.Core.Position, TextAdventure",
             "x": -1,
             "y": -1
           },
-          "Description": "",
+          "Description": "Keeps your toes safe.",
           "ForceSingle": true,
           "Tag": "Boots"
         }
@@ -411,7 +464,8 @@
     },
     {
       "$type": "TextAdventure.Core.Enemy, TextAdventure",
-      "Name": "Goma",
+      "CantEscape": true,
+      "Name": "Sir Martin",
       "Team": "Kingdom",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
@@ -422,30 +476,131 @@
       "Money": 7,
       "Inventory": [
         {
+          "$type": "TextAdventure.Core.Weapon, TextAdventure",
+          "Damage": 1,
+          "CritChance": 0.6,
+          "Name": "Tin Broadsword",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "Fit for a night.",
+          "ForceSingle": true,
+          "Tag": "Sword"
+        },
+        {
           "$type": "TextAdventure.Core.Armor, TextAdventure",
           "ArmorPoints": 3,
+          "SpeedPoints": 0,
           "Name": "Strong Helmet",
           "Pos": {
             "$type": "TextAdventure.Core.Position, TextAdventure",
             "x": -1,
             "y": -1
           },
-          "Description": "",
+          "Description": "Keeps your head in the game.",
           "ForceSingle": true,
           "Tag": "Helmet"
         },
         {
           "$type": "TextAdventure.Core.Armor, TextAdventure",
           "ArmorPoints": 4,
+          "SpeedPoints": 0,
           "Name": "Strong Pants",
           "Pos": {
             "$type": "TextAdventure.Core.Position, TextAdventure",
             "x": -1,
             "y": -1
           },
-          "Description": "",
+          "Description": "Legs of Power.",
           "ForceSingle": true,
           "Tag": "Pants"
+        }
+      ]
+    },
+    {
+      "$type": "TextAdventure.Core.Enemy, TextAdventure",
+      "CantEscape": true,
+      "Name": "King Bubba",
+      "Team": "Kingdom",
+      "Pos": {
+        "$type": "TextAdventure.Core.Position, TextAdventure",
+        "x": 3,
+        "y": 0
+      },
+      "Health": 30,
+      "Money": 100.00,
+      "Inventory": [
+        {
+          "$type": "TextAdventure.Core.Weapon, TextAdventure",
+          "Damage": 4,
+          "CritChance": 0.9,
+          "Name": "Noble Staff",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "Just as useful as rulers.",
+          "ForceSingle": true,
+          "Tag": "Sword"
+        },
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 4,
+          "SpeedPoints": 2,
+          "Name": "Noble Helmet",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "Weak'nt, Slow'nt, and Clean'nt.",
+          "ForceSingle": true,
+          "Tag": "Helmet"
+        },
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 6,
+          "SpeedPoints": 2,
+          "Name": "Noble Gown",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "Body of a King.",
+          "ForceSingle": true,
+          "Tag": "Chestplate"
+        },
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 4,
+          "SpeedPoints": 3,
+          "Name": "Noble Pants",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "Houses the noble bottom.",
+          "ForceSingle": true,
+          "Tag": "Pants"
+        },
+        {
+          "$type": "TextAdventure.Core.Armor, TextAdventure",
+          "ArmorPoints": 3,
+          "SpeedPoints": 4,
+          "Name": "Noble Boots",
+          "Pos": {
+            "$type": "TextAdventure.Core.Position, TextAdventure",
+            "x": -1,
+            "y": -1
+          },
+          "Description": "Apparently King Bubba has 2 left feet.",
+          "ForceSingle": true,
+          "Tag": "Boots"
         }
       ]
     }
@@ -454,13 +609,14 @@
     {
       "$type": "TextAdventure.Core.Armor, TextAdventure",
       "ArmorPoints": 3,
+      "SpeedPoints": 3,
       "Name": "Wooly Cloak",
       "Pos": {
         "$type": "TextAdventure.Core.Position, TextAdventure",
         "x": 1,
         "y": 3
       },
-      "Description": "",
+      "Description": "Very soft and light.",
       "ForceSingle": true,
       "Tag": "Chestplate"
     },
@@ -473,7 +629,7 @@
         "x": 4,
         "y": 3
       },
-      "Description": "",
+      "Description": "Old?",
       "ForceSingle": false,
       "Tag": "Key"
     }

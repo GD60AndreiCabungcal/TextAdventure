@@ -15,16 +15,16 @@ namespace TextAdventure.Core
         public int Health { get { return health; } protected set { health = Math.Max(0, value); } }
 
         float money;
-        public float Money { get { return MathF.Round(money, 2); } protected set { money = value; } }
+        public float Money { get { return MathF.Round(money, 2); } protected set { money = MathF.Max(0, value); } }
 
         public List<Item> Inventory { get; protected set; }
 
-        public Entity(string name, string team, int x, int y, params Item[] inventory)
+        public Entity(string name, string team, int health, int x, int y, params Item[] inventory)
         {
             Name = name;
             Team = team;
             Pos = new Position(x, y);
-            Health = 10;
+            Health = health;
             Inventory = inventory.ToList();
         }
 
@@ -62,13 +62,13 @@ namespace TextAdventure.Core
             //check if other entity critical hits player
             bool didCrit = weapon.CritChance > rng.NextDouble();
 
-            //damage all armor items if the entity defended the attack
+            //damage some armor items if the entity defended the attack
             if(Armor() > 0 && !didCrit) {
                 foreach(Item item in Inventory)
                 {
                     if(item.GetType() != typeof(Armor)) continue;
                     Armor armor = (Armor)item;
-                    armor.ArmorPoints -= weapon.Damage;
+                    armor.ArmorPoints -= rng.Next(2) == 1 ? weapon.Damage : 0;
                 }
                 Console.WriteLine($"{Name} defended {damagedBy.Name}'s attack!");
                 return false;
@@ -78,9 +78,11 @@ namespace TextAdventure.Core
                 Console.Write($"{Name} took {weapon.Damage} damage");
                 if(didCrit)
                 {
-                    int critDamage = (weapon.Damage / 2) + 1;
-                    Health -= critDamage;
-                    Console.Write($" + {critDamage} critical damage");
+                    int critDamage = (weapon.Damage / 2);
+                    if(critDamage > 0) {
+                        Health -= critDamage;
+                        Console.Write($" + {critDamage} critical damage");
+                    }
                 }
                 Console.WriteLine($" from {damagedBy.Name}'s {weapon.Name}!");
                 if(health <= 0) Die(world, damagedBy);
@@ -91,11 +93,13 @@ namespace TextAdventure.Core
         //when entity dies
         public virtual void Die(World world, Entity killedBy)
         {
+            Random rng = new Random();
+
             Console.WriteLine($"{killedBy.Name} has killed {Name}!");
             //entity drops all their items
-            for(int i = 0; i < Inventory.Count; i++) world.EntityDropItem(this, Inventory[0]);
-            //killedBy gains money
-            killedBy.GainMoney(Money);
+            for(int i = 0; i < Inventory.Count; i++) world.EntityDropItem(this, Inventory[i]);
+            //killedBy gains money; can gain up to 105% of this entity's money
+            killedBy.GainMoney(Money + ((float)rng.NextDouble() - 0.5f) * (Money/10));
             //entity gets remove from the world
             world.Entities.Remove(this);
         }

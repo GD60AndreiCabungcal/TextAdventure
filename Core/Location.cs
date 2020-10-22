@@ -46,6 +46,13 @@ namespace TextAdventure.Core
                     int itemIndex = DecisionHandler.MakeDecision(decisions, "You picked up");
                     //if player chooses the last option, then they don't pick up anything
                     if(itemIndex != items.Count) {
+                        //drop any items of a similar type that are forced single
+                        Item similarItem = player.Inventory.Find(x => x.ForceSingle == true && x.Tag == items[itemIndex].Tag);
+                        if(similarItem != null) {
+                            Console.WriteLine($"You dropped {similarItem.Name} in it's place.");
+                            world.EntityDropItem(player, similarItem);
+                        }
+                        //pick up item
                         Item item = items[itemIndex];
                         world.EntityGetItem(player, item);
                         items.Remove(item);

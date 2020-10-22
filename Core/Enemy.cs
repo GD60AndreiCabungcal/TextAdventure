@@ -7,8 +7,11 @@ namespace TextAdventure.Core
 {
     public class Enemy : Entity
     {
-        public Enemy(string name, string team, float money, int x, int y, params Item[] inventory) : base(name, team, x, y, inventory) 
+        public bool CantEscape { get; private set; }
+
+        public Enemy(string name, string team, float money, int health, bool cantEscape, int x, int y, params Item[] inventory) : base(name, team, health, x, y, inventory) 
         { 
+            CantEscape = cantEscape;
             Money = money;
         }
 

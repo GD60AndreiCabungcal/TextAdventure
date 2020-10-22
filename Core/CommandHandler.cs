@@ -21,19 +21,19 @@ namespace TextAdventure.Core
         public static List<PlayerAction<bool>> defaultCommands = new PlayerAction<bool>[]
         {
             //when player wants to check their stats
-            new PlayerAction<bool>("stats", (args) => "stats", (args) => 
-                {   
-                    Player player = (Player)args[1];
+            new PlayerAction<bool>("stats", (args) => "stats", (args) => {   
+                Player player = (Player)args[1];
 
-                    string name = player.Name;
-                    int health = player.Health;
-                    int armor = player.Armor();
-                    float money = player.Money;
+                string name = player.Name;
+                int health = player.Health;
+                int armor = player.Armor();
+                int speed = player.Speed();
+                float money = player.Money;
 
-                    //display stats
-                    Console.WriteLine($"\n{name}'s Stats:\nHealth: {health}\nArmor: {armor}\nMoney: {money.ToString("C")}\n");
-                    return false;
-                }),
+                //display stats
+                Console.WriteLine($"\n{name}'s Stats:\nHealth: {health}\nArmor: {armor}\nSpeed: {speed}\nMoney: {money.ToString("C")}\n");
+                return false;
+            }),
             //when player wants to check their inventory
             new PlayerAction<bool>("inventory", (args) => "inventory", (args) => {   
                 Player player = (Player)args[1];
@@ -44,6 +44,20 @@ namespace TextAdventure.Core
                     inventory += $"\n    {item.Stats()}";
                 }
                 Console.WriteLine($"\nInventory: {inventory}\n");
+                return false;
+            }),
+            //when player wants to see the item's description.
+            new PlayerAction<bool>("check", (args) => "check $itemName", (args) => {   
+                Player player = (Player)args[1];
+                string[] input = (string[])args[2];
+
+                if(player.Inventory.Count <= 0) {
+                    Console.WriteLine("You have no items!");
+                } else {
+                    Item item = player.Inventory.Find(x => x.Name.ToLower() == string.Join(" ", input.Skip(1)).ToLower());
+                    if(item == null) Console.WriteLine("Item name is invalid.");
+                    else Console.WriteLine($"\n{item.Description}\n");
+                }
                 return false;
             }),
             //when player wants to eat
@@ -58,7 +72,7 @@ namespace TextAdventure.Core
                     Console.WriteLine("You have no food!");
                     return false;
                 }
-                Food food = (Food)player.Inventory.Find(x => x.GetType() == typeof(Food) && x.Name.Replace(" ", "").ToLower() == string.Join("", input.Skip(1)).ToLower());
+                Food food = (Food)player.Inventory.Find(x => x.GetType() == typeof(Food) && x.Name.ToLower() == string.Join(" ", input.Skip(1)).ToLower());
                 player.Heal(food);
                 return false;
             }),
@@ -79,7 +93,7 @@ namespace TextAdventure.Core
 
                     //skip over null locations (used as walls)
                     if(location == null) continue;
-                    //if the location is open, then add it to the allowdMoves
+                    //if the location is open, then add it to the allowedMoves
                     if(location.IsOpen) allowedMoves.Add(direction);
                 }
 
@@ -97,11 +111,13 @@ namespace TextAdventure.Core
                 Player player = (Player)args[1];
                 string[] input = (string[])args[2];
 
+                //input is invalid if the command is invalid
                 if(input.Length != 2)
                 {
                     Console.WriteLine("Invalid Argument Length.");
                     return false;
                 }
+                //get direction from directions and move the player accordingly
                 (int, int, string) move = allowedMoves.Find(x => x.Item3 == input[1].ToLower());
                 if(move == (0, 0, null)) {
                     Console.WriteLine("Invalid 2nd argument.");
@@ -132,7 +148,7 @@ namespace TextAdventure.Core
                     Console.WriteLine("Invalid Argument Length.");
                 } else if(input[1] == "all") {
                     itemName = string.Join(" ", input.Skip(2));
-                    List<Item> items = player.Inventory.FindAll(x => x.Name == itemName);
+                    List<Item> items = player.Inventory.FindAll(x => x.Name.ToLower() == itemName);
                     if(items.Count == 0) {
                         Console.WriteLine("You don't have those items!");
                     } else {
@@ -141,7 +157,7 @@ namespace TextAdventure.Core
                     }
                 } else {
                     itemName = string.Join(" ", input.Skip(1));
-                    Item item = player.Inventory.Find(x => x.Name == itemName);
+                    Item item = player.Inventory.Find(x => x.Name.ToLower() == itemName.ToLower());
                     if(item == null) { 
                         Console.WriteLine("You don't have that item!");
                     } else {
@@ -172,7 +188,7 @@ namespace TextAdventure.Core
                 Player player = (Player)args[0];
                 List<Entity> defenders = (List<Entity>)args[1];
 
-                string result = "attack $";
+                string result = "attack ";
                 foreach(Entity defender in defenders)
                 {
                     result += defender.Name + '|';
@@ -214,11 +230,12 @@ namespace TextAdventure.Core
                     Console.WriteLine("You have no food!");
                     //continue turn, continue battle
                     return (true, true);
+                } else {
+                    Food food = (Food)player.Inventory.Find(x => x.GetType() == typeof(Food) && x.Name.Replace(" ", "").ToLower() == string.Join("", input.Skip(1)).ToLower());
+                    player.Heal(food);
+                    //end turn, continue battle
+                    return (false, true);
                 }
-                Food food = (Food)player.Inventory.Find(x => x.GetType() == typeof(Food) && x.Name.Replace(" ", "").ToLower() == string.Join("", input.Skip(1)).ToLower());
-                player.Heal(food);
-                //end turn, continue battle
-                return (false, true);
             }),
             //when the player wants to check their inventory; it doesn't take up a turn
             new PlayerAction<(bool, bool)>("inventory", (args) => "inventory", (args) => {   

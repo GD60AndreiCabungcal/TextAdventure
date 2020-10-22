@@ -64,9 +64,10 @@ namespace TextAdventure.Core
             {
                 input = Console.ReadLine().Split(' ');
 
+                //find the action from default commands
                 PlayerAction<bool> action = CommandHandler.defaultCommands.Find((x) => x.Name == input[0].ToLower());
-                if(action != null) 
-                {
+                //run action if it's valid
+                if(action != null) {
                     bool result = action.Do(world, player, input);
                     if(result) break; //if the result is true, the action loop will terminate
                 }

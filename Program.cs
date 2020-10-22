@@ -16,13 +16,14 @@ public class Program
     static void Main(string[] args)
     {
         /*Game Map
-         01234 <- col/x value  Map layout
-        0   *      X - You Are Here
-        1S*E*E     * - Location
-        2  D       S - Shop
-        3EI*SK     D - Door
-        4X         K - Key
-                   E - Enemy
+         01234 <- col/x value   Map layout
+        0 B *                   X - You Are Here
+        1S*E*E                  * - Location
+        2  D                    S - Shop
+        3EI*SK                  D - Door
+        4X                      K - Key
+                                E - Enemy
+                                B - Blacksmith
         ^- row/y value
 
         get location: world.Locations[x,y]
@@ -36,7 +37,7 @@ public class Program
         /* --- START OF GAME --- */
         Console.WriteLine("Hello traveler! What is your name?");
         player.Name = Console.ReadLine();
-        Console.WriteLine($"Nice to meet you, {player.Name}. Good luck on your adventure!");
+        Console.WriteLine($"Nice to meet you, {player.Name}. Stop king Bubba!");
         //game loop
         while(true) 
         {
