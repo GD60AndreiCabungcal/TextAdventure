@@ -7,15 +7,35 @@ namespace TextAdventure.Core
 {
     public class Enemy : Entity
     {
-        public Enemy(string name, int x, int y, params Item[] inventory) : base(name, x, y, inventory) { }
+        public bool CantEscape { get; private set; }
+
+        public Enemy(string name, string team, float money, int health, bool cantEscape, int x, int y, params Item[] inventory) : base(name, team, health, x, y, inventory) 
+        { 
+            CantEscape = cantEscape;
+            Money = money;
+        }
 
         public override void Interact(World world, Entity entity)
         {
+            //do nothing if the entity isn't a player
             if(entity.GetType() != typeof(Player)) return;
-            Player player = (Player)entity;
 
-            Console.WriteLine($"{Name}: Hey you, let's fight!");
-            world.Fight(this, player);
+            //get all entities with the same position as this enemy
+            Entity[] entities = world.Entities.FindAll(e => e.Pos == this.Pos).ToArray();
+            Enemy[] enemies = entities.OfType<Enemy>().ToArray();
+
+            //print all the enemies the player is going to battle
+            for(int i = 0; i < enemies.Count(); i++)
+            {
+                if(enemies[i] == this) {
+                    Console.WriteLine($"{Name}: Hey you! Let's fight!");
+                } else {
+                    Console.WriteLine($"{enemies[i].Name}: Me too!");
+                }
+            }
+
+            //start battle
+            Simulator.StartBattle(world, entities);
         }
     }
 }

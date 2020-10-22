@@ -7,13 +7,14 @@ namespace TextAdventure.Core
 {
     public class Shop : Location
     {
-        public Merchant Owner { get; private set; }
+        public ShopOwner Owner { get; private set; }
         public ShopItem[] ShopItems { get; set; }
 
-        public Shop(string name, Merchant owner, ShopItem[] shopItems, string description = "") : base(name, description)
+        public Shop(string name, ShopOwner owner, ShopItem[] shopItems, string description = "") : base(name, description)
         {
             Owner = owner;
             ShopItems = shopItems;
+            Tag = "Shop";
         }
 
         public override void LocationEvent(World world, Player player)
@@ -21,14 +22,13 @@ namespace TextAdventure.Core
             base.LocationEvent(world, player);
 
             string[] decisions = new string[ShopItems.Length + 1];
-            for(int i = 0; i < ShopItems.Length; i++) {
-                decisions[i] = $"{ShopItems[i].item} for ${ShopItems[i].price}";
+            for(int i = 0; i < decisions.Length; i++) {
+                decisions[i] = i < ShopItems.Length ? $"{ShopItems[i].item} for {ShopItems[i].price.ToString("C")}" : "Nothing";
             }
-            decisions[ShopItems.Length] = "Nothing";
-
+            
             while(true)
             {
-                Console.WriteLine($"What do you wnat to buy?\nMoney: ${player.Money}");
+                Console.WriteLine($"What do you want to buy?\nMoney: {player.Money.ToString("C")}");
                 int answer = DecisionHandler.MakeDecision(decisions);
                 if(answer == ShopItems.Length) {
                     break;
@@ -40,9 +40,9 @@ namespace TextAdventure.Core
             }
         }
 
-        public override string MapIcon()
+        public override char MapIcon()
         {
-            return "S";
+            return 'S';
         }
     }
     
